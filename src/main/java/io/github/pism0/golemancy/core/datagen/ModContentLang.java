@@ -52,5 +52,37 @@ final class ModContentLang {
         lang.add("golemancy.message.wand_lost", "The linked golem is not nearby");
         lang.add("golemancy.message.home_too_far", "Home must be within %s blocks of the golem");
         lang.add("golemancy.message.home_set", "Home set to %1$s, %2$s, %3$s");
+
+        // --- Binding Altar --------------------------------------------------------------------------
+        lang.addBlock(io.github.pism0.golemancy.core.ModBlocks.BINDING_ALTAR, "Binding Altar");
+        lang.add("golemancy.altar.status.empty", "Waiting for a Construct Frame or Remains");
+        lang.add("golemancy.altar.status.invalid_body", "This item cannot be bound");
+        lang.add("golemancy.altar.status.missing_core", "Needs a Core");
+        lang.add("golemancy.altar.status.invalid_core", "That is not a Core");
+        lang.add("golemancy.altar.status.invalid_inscription", "The inscription cannot be used");
+        lang.add("golemancy.altar.status.missing_repair_material", "Needs repair material");
+        lang.add("golemancy.altar.status.missing_fuel", "Needs a fuel item");
+        lang.add("golemancy.altar.status.ready", "Ready to bind");
+        lang.add("golemancy.altar.status.output_ready", "Dormant Golem ready to collect");
+        lang.add("golemancy.altar.inscription.not_inscription", "Only spell scrolls can be inscribed");
+        lang.add("golemancy.altar.inscription.blank", "The scroll holds no spell");
+        lang.add("golemancy.altar.inscription.not_allowed", "Golems cannot cast this spell");
+        lang.add("golemancy.altar.inscription.no_slot", "This frame and core have no free spell slot");
+        lang.add("golemancy.altar.inscription.wrong_school", "The spell's school does not match the core");
+        lang.add("golemancy.altar.inscription.level_too_high", "The spell's level is too high for this core");
+        lang.add("golemancy.altar.too_slow", "Needs at least %s RPM");
+        lang.add("golemancy.altar.progress", "Binding: %s%%");
+        lang.add("golemancy.altar.catalyst", "Catalyst: %1$s (%2$s mB)");
+
+        // --- JEI ----------------------------------------------------------------------------------
+        lang.add("golemancy.jei.binding", "Binding Altar");
+        lang.add("golemancy.jei.bind", "Bind");
+        lang.add("golemancy.jei.rebuild", "Rebuild");
+        lang.add("golemancy.jei.scroll_optional", "Scroll is optional");
+        lang.add("golemancy.jei.no_spell_slot", "This core cannot hold a spell");
+        lang.add("golemancy.jei.rebuild.hint", "A new core restores integrity");
+        lang.add("golemancy.jei.min_speed", "Min. %s RPM, shaft from below");
+        lang.add("golemancy.jei.info.control_wand", "Use on a golem you own to configure it and link the wand. Sneak-use to pack the golem up into an item. Use a linked wand on a block to set the golem's home.");
+        lang.add("golemancy.jei.info.binding_altar", "Powered by a shaft from below. Place a Construct Frame and a Core on it (plus an optional spell scroll) to bind a Dormant Golem, or Construct Remains with repair material and fuel to rebuild one. Accepts funnels, chutes, deployers and mechanical arms.");
     }
 }

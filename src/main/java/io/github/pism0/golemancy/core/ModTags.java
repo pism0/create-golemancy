@@ -31,6 +31,13 @@ public final class ModTags {
     /** Items the Binding Altar accepts in its inscription slot (Iron's scrolls). */
     public static final TagKey<Item> INSCRIPTIONS = item("inscriptions");
 
+    /**
+     * Fluids the Binding Altar accepts in its tank as a catalyst (twice the binding speed). Empty by
+     * default; Create: Wizardry's mana is added as an optional entry (SDD 9.3).
+     */
+    public static final TagKey<net.minecraft.world.level.material.Fluid> BINDING_CATALYSTS =
+            TagKey.create(Registries.FLUID, Golemancy.id("binding_catalysts"));
+
     private static TagKey<Item> item(String path) {
         return TagKey.create(Registries.ITEM, Golemancy.id(path));
     }

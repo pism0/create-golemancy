@@ -1,0 +1,93 @@
+{
+  "type": "create:sequenced_assembly",
+  "ingredient": {
+    "item": "golemancy:stone_torso_shell"
+  },
+  "results": [
+    {
+      "id": "golemancy:frame/stone_guardian"
+    }
+  ],
+  "sequence": [
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "golemancy:incomplete_frame/stone_guardian"
+        },
+        {
+          "item": "golemancy:stone_limb"
+        }
+      ],
+      "results": [
+        {
+          "id": "golemancy:incomplete_frame/stone_guardian"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "golemancy:incomplete_frame/stone_guardian"
+        },
+        {
+          "item": "golemancy:stone_limb"
+        }
+      ],
+      "results": [
+        {
+          "id": "golemancy:incomplete_frame/stone_guardian"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "golemancy:incomplete_frame/stone_guardian"
+        },
+        {
+          "item": "golemancy:stone_head"
+        }
+      ],
+      "results": [
+        {
+          "id": "golemancy:incomplete_frame/stone_guardian"
+        }
+      ]
+    },
+    {
+      "type": "create:pressing",
+      "ingredients": [
+        {
+          "item": "golemancy:incomplete_frame/stone_guardian"
+        }
+      ],
+      "results": [
+        {
+          "id": "golemancy:incomplete_frame/stone_guardian"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "golemancy:incomplete_frame/stone_guardian"
+        },
+        {
+          "item": "golemancy:core_housing"
+        }
+      ],
+      "results": [
+        {
+          "id": "golemancy:incomplete_frame/stone_guardian"
+        }
+      ]
+    }
+  ],
+  "transitional_item": {
+    "id": "golemancy:incomplete_frame/stone_guardian"
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "values": [
+    {
+      "id": "create_wizardry:mana",
+      "required": false
+    }
+  ]
+}

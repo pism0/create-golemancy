@@ -1,0 +1,109 @@
+{
+  "type": "create:sequenced_assembly",
+  "ingredient": {
+    "item": "golemancy:stone_torso_shell"
+  },
+  "results": [
+    {
+      "id": "golemancy:frame/stone_brute"
+    }
+  ],
+  "sequence": [
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "golemancy:incomplete_frame/stone_brute"
+        },
+        {
+          "item": "golemancy:stone_plate"
+        }
+      ],
+      "results": [
+        {
+          "id": "golemancy:incomplete_frame/stone_brute"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "golemancy:incomplete_frame/stone_brute"
+        },
+        {
+          "item": "golemancy:stone_limb"
+        }
+      ],
+      "results": [
+        {
+          "id": "golemancy:incomplete_frame/stone_brute"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "golemancy:incomplete_frame/stone_brute"
+        },
+        {
+          "item": "golemancy:stone_limb"
+        }
+      ],
+      "results": [
+        {
+          "id": "golemancy:incomplete_frame/stone_brute"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "golemancy:incomplete_frame/stone_brute"
+        },
+        {
+          "item": "golemancy:stone_head"
+        }
+      ],
+      "results": [
+        {
+          "id": "golemancy:incomplete_frame/stone_brute"
+        }
+      ]
+    },
+    {
+      "type": "create:pressing",
+      "ingredients": [
+        {
+          "item": "golemancy:incomplete_frame/stone_brute"
+        }
+      ],
+      "results": [
+        {
+          "id": "golemancy:incomplete_frame/stone_brute"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "golemancy:incomplete_frame/stone_brute"
+        },
+        {
+          "item": "golemancy:core_housing"
+        }
+      ],
+      "results": [
+        {
+          "id": "golemancy:incomplete_frame/stone_brute"
+        }
+      ]
+    }
+  ],
+  "transitional_item": {
+    "id": "golemancy:incomplete_frame/stone_brute"
+  }
+}

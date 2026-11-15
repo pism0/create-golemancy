@@ -24,8 +24,6 @@ public final class ExternalIds {
     // --- Iron's Spells 'n Spellbooks items ----------------------------------------------------
     public static final ResourceLocation ARCANE_ESSENCE = irons("arcane_essence");
     public static final ResourceLocation SCROLL = irons("scroll");
-    public static final ResourceLocation FROZEN_BONE = irons("frozen_bone");
-    public static final ResourceLocation CINDER_ESSENCE = irons("cinder_essence");
 
     // --- Iron's spells on the v0.1 allow-list -------------------------------------------------
     public static final ResourceLocation SPELL_FIREBOLT = irons("firebolt");
@@ -48,10 +46,8 @@ public final class ExternalIds {
     // --- Create items -----------------------------------------------------------------------------
     public static final ResourceLocation ANDESITE_ALLOY = create("andesite_alloy");
     public static final ResourceLocation ANDESITE_CASING = create("andesite_casing");
-    public static final ResourceLocation BRASS_CASING = create("brass_casing");
     public static final ResourceLocation SHAFT = create("shaft");
     public static final ResourceLocation COPPER_SHEET = create("copper_sheet");
-    public static final ResourceLocation BRASS_SHEET = create("brass_sheet");
 
     // --- Create: Wizardry (optional; only ever used behind a mod_loaded condition) --------------
     public static final ResourceLocation WIZARDRY_MANA_FLUID = wizardry("mana");

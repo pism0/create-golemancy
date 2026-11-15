@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "working=false": {
+      "model": "golemancy:block/binding_altar"
+    },
+    "working=true": {
+      "model": "golemancy:block/binding_altar_working"
+    }
+  }
+}

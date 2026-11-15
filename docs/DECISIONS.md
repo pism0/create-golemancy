@@ -132,3 +132,48 @@ The build VM has no GPU or OpenGL driver, so the client cannot be launched there
 PROGRESS.md, M1). A software renderer (Mesa llvmpipe for Windows) would make in-game checks and
 screenshots possible, but it is a third-party binary download, so it was not installed without the
 owner's approval. `./gradlew runClientSmoke -Psmoke=<script>` is ready for a machine with a GPU.
+
+## D-013 The Binding Altar has no container screen
+
+SDD 14 mentions "a Binding Altar screen" in its summary line, while 14.2 describes the feedback as
+stage, missing inputs, rotation requirement, progress and output status, mirrored in the goggles
+overlay. The altar is built like every other Create machine: items go in and out by hand, funnel,
+chute, deployer or mechanical arm, and all of the 14.2 information is shown in Create's hover
+overlay (without goggles) plus kinetic stats and catalyst level with goggles. A slot-based container
+GUI would be the only one in a Create line and adds nothing the overlay lacks. **This is a judgement
+call on an ambiguous line, flagged for the owner:** if a real GUI is wanted it is an additive change.
+
+## D-014 Recipe viewers: JEI now, EMI through its JEI compatibility
+
+The kickoff prompt lists JEI as the dependency and EMI as optional. v0.1 ships a JEI plugin
+(Binding Altar category with bind and rebuild pages). There is no dedicated EMI plugin; a native
+one is a small follow-up. **Flagged for the owner** because SDD 18 lists "JEI and EMI categories".
+
+## D-015 Manufacturing choices where the SDD left room
+
+- **Parts:** stone plates are sawn from smooth stone, clay plates pressed from clay blocks; limbs are
+  compacted (2 plates + andesite alloy); heads and torso shells are mechanical crafting.
+- **Core housing:** from a copper sheet (SDD 6.3 allows brass or copper; copper keeps tier 1
+  reachable before brass).
+- **Spout step:** the base path may not depend on Create: Wizardry and Iron's ships no fluid, so the
+  housing is filled with water (Arcane, Frost) or lava (Fire), giving two intermediates (Quenched /
+  Molten Core Housing). The school is decided in the basin: Arcane Essence + amethyst (heated),
+  + blaze powder (heated), or + packed ice (cold).
+- **Two frames from one torso shell:** the Brute sequence starts with an extra plate. Create picks a
+  sequenced-assembly recipe by the deployer's held item, so both recipes can share the same start
+  item (covered by `sequencedAssemblyBuildsFrames`).
+- **Rebuilding Remains:** 4 repair items of the material + 1 fuel item. A core placed alongside
+  replaces the old one and is the "dedicated repair" that restores integrity to 100% (SDD 11.3);
+  a shattered golem needs one. A different core type drops the installed spells.
+- **Create: Wizardry (data only):** mana fills a housing straight into an Arcane Core; a mana
+  bucket is a high-energy fuel; mana in the altar's tank is a catalyst that doubles binding speed
+  (tag `golemancy:binding_catalysts`, optional entry). All conditional or optional.
+
+## D-016 Iron's spell configuration is loaded lazily
+
+Iron's builds its per-spell configuration on `OnDatapackSyncEvent`, i.e. the first time a player
+joins (or on `/reload`). Before that every spell reports the global default school (evocation).
+An automated Binding Altar can run before anyone logs in, so `IronsSpellCaster.schoolOf` falls back
+to the spell's built-in school when the configured value is just the global default. Found by the
+GameTests (which run with no player). Side effect: a modpack that deliberately moves an allow-listed
+spell *to* evocation is read as its built-in school.

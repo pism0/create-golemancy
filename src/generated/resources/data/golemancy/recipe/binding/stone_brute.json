@@ -1,0 +1,8 @@
+{
+  "type": "golemancy:binding",
+  "frame": {
+    "item": "golemancy:frame/stone_brute"
+  },
+  "golem_frame": "golemancy:brute",
+  "golem_material": "golemancy:stone"
+}

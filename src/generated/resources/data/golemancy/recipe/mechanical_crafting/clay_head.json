@@ -1,0 +1,18 @@
+{
+  "type": "create:mechanical_crafting",
+  "accept_mirrored": true,
+  "category": "misc",
+  "key": {
+    "P": {
+      "item": "golemancy:clay_plate"
+    }
+  },
+  "pattern": [
+    "PP",
+    "PP"
+  ],
+  "result": {
+    "count": 1,
+    "id": "golemancy:clay_head"
+  }
+}

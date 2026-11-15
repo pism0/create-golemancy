@@ -1,0 +1,61 @@
+{
+  "type": "create:sequenced_assembly",
+  "ingredient": {
+    "item": "create:copper_sheet"
+  },
+  "results": [
+    {
+      "id": "golemancy:core_housing"
+    }
+  ],
+  "sequence": [
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "golemancy:incomplete_core_housing"
+        },
+        {
+          "item": "minecraft:amethyst_shard"
+        }
+      ],
+      "results": [
+        {
+          "id": "golemancy:incomplete_core_housing"
+        }
+      ]
+    },
+    {
+      "type": "create:pressing",
+      "ingredients": [
+        {
+          "item": "golemancy:incomplete_core_housing"
+        }
+      ],
+      "results": [
+        {
+          "id": "golemancy:incomplete_core_housing"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "golemancy:incomplete_core_housing"
+        },
+        {
+          "item": "irons_spellbooks:arcane_essence"
+        }
+      ],
+      "results": [
+        {
+          "id": "golemancy:incomplete_core_housing"
+        }
+      ]
+    }
+  ],
+  "transitional_item": {
+    "id": "golemancy:incomplete_core_housing"
+  }
+}

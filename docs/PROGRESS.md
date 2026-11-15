@@ -9,7 +9,7 @@ Target: v0.1 release candidate = Milestones 0–4 (SDD 17, 18). Gates are derive
 | M0 Prototypes | Three spikes answered and written up; v0.1 assembly design confirmed | **Passed** |
 | M1 Foundation | Builds; datagen runs; GameTest harness runs; loads with and without Create: Wizardry | **Passed** (client launch not verifiable here, see below) |
 | M2 First golem | Stone Guardian spawns from an item with a GeckoLib model, persists its spec, fights | **Passed** (rendering not verifiable here) |
-| M3 Manufacturing | Parts → frame → core → Binding Altar → Dormant Golem, automatable; JEI + Ponder | Not started |
+| M3 Manufacturing | Parts → frame → core → Binding Altar → Dormant Golem, automatable; JEI + Ponder | **Passed** (JEI/Ponder/rendering not verifiable here) |
 | M4 Magic and lifecycle | SDD 20.1 loop complete; all GameTests pass; `playtest/` prepared | Not started |
 
 ## Phase 0 — Environment (2026-11-15)
@@ -133,5 +133,50 @@ Gate checks:
 
 Open issues: animation rotation signs and the head-tracking sign follow the Bedrock/GeckoLib
 conventions but have never been seen in motion; listed as a playtest check.
+
+Gate: **passed**.
+
+## M3 — Manufacturing (2026-11-15)
+
+Plan (SDD 4.2, 6.3, 7.4, 8, 9, 14.2, 14.3): stock-Create recipes for parts, frames and cores;
+`golemancy:binding` recipe type; Binding Altar as a Create kinetic block with automation; JEI
+category; Ponder scenes; conditional Create: Wizardry data.
+
+What changed:
+
+- 18 stock-Create recipes generated with Create's datagen API (cutting, pressing, compacting,
+  mechanical crafting, sequenced assembly, filling, mixing), 4 `golemancy:binding` recipes,
+  2 crafting recipes, 1 conditional Create: Wizardry recipe. All under the `golemancy` namespace.
+- `block.BindingRecipe` + `block.BindingLogic` (no Create code): binding and rebuilding plans,
+  slot routing, the four SDD 7.4 spell checks.
+- `integration.create`: `BindingAltarBlock` / `BindingAltarBlockEntity` (kinetic, shaft from below,
+  item + fluid capabilities, comparator output, hover and goggle tooltips, working state),
+  mechanical arm interaction point, configurable stress impact; client renderer + Flywheel visual.
+- `integration.irons_spellbooks.IronsSpellCaster` (API classes only) reads scrolls and resolves schools.
+- `integration.jei`: Binding Altar category (bind pages per frame x core, rebuild pages).
+- Ponder: `binding_altar` and `frame_line` scenes; schematics written as NBT by
+  `tools/make_ponder.py` (no display to save them in-game).
+- Art: altar block textures (`art/previews/blocks.png`), reviewed; rune ring made more saturated
+  for the working state.
+
+Gate checks:
+
+| Check | Result |
+| --- | --- |
+| `./gradlew build`, `runData` | pass |
+| `runGameTestServer` with Create: Wizardry | pass, 24/24 |
+| `runGameTestServer -Pwith_wizardry=false` | pass, 24/24 |
+| All recipes load; compat recipe present only with Wizardry (`manufacturingRecipesLoad`) | pass |
+| Frames and core housing assemble through Create's own lookup (`sequencedAssemblyBuildsFrames`) | pass |
+| M0 spike 1 regression (`sequencedAssemblyDiscardsExtraComponents`) | pass |
+| Altar turns valid inputs into the right spec, rejects invalid ones (`bindingBuildsTheRightSpec`, `bindingRejectsInvalidInputs`) | pass |
+| Altar under real shaft power, minimum speed, hopper-fed, arm point (`altarBindsUnderRotation`, `altarNeedsMinimumSpeed`, `altarIsFedByAutomation`, `mechanicalArmCanTargetAltar`) | pass |
+| JEI category, Ponder scenes, altar rendering | compile only → `docs/PLAYTEST.md` |
+
+Found and fixed: Iron's lazy spell config made every scroll look like the wrong school on a server
+with no players (D-016).
+
+Open issues: JEI, Ponder and the altar renderer have never been run (no OpenGL here). They follow
+Create's and JEI's own patterns and are the most likely place for a first-launch problem.
 
 Gate: **passed**.

@@ -1,0 +1,14 @@
+{
+  "type": "create:pressing",
+  "ingredients": [
+    {
+      "item": "minecraft:clay"
+    }
+  ],
+  "results": [
+    {
+      "count": 2,
+      "id": "golemancy:clay_plate"
+    }
+  ]
+}

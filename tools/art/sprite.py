@@ -52,14 +52,21 @@ def check_grid(grid, width=None, height=None, name="sprite"):
             raise ValueError(f"{name}: row {i} is {len(row)} wide, expected {width}: {row!r}")
 
 
-def shade_at(grid, legend, x, y):
-    """Shade index for the auto-shaded pixel at (x, y)."""
+def shade_at(grid, legend, x, y, inlay=""):
+    """Shade index for the auto-shaded pixel at (x, y).
+
+    Characters listed in `inlay` are flat details set into a surface (runes, seams of another
+    colour): they do not count as a region boundary, so the surface around them is not bevelled.
+    """
     ramp, fixed = _ramp_of(legend, _cell(grid, x, y))
     if fixed is not None:
         return fixed
 
     def outside(dx, dy):
-        other, _ = _ramp_of(legend, _cell(grid, x + dx, y + dy))
+        ch = _cell(grid, x + dx, y + dy)
+        if ch in inlay and ch != ".":
+            return False
+        other, _ = _ramp_of(legend, ch)
         return other is not ramp
 
     up, left, down, right = outside(0, -1), outside(-1, 0), outside(0, 1), outside(1, 0)
@@ -79,7 +86,7 @@ def shade_at(grid, legend, x, y):
     return BASE
 
 
-def render(grid, legend, outline=True, name="sprite"):
+def render(grid, legend, outline=True, name="sprite", inlay=""):
     """Paints a character grid into an RGBA image of the same size."""
     check_grid(grid, name=name)
     h, w = len(grid), len(grid[0])
@@ -91,7 +98,7 @@ def render(grid, legend, outline=True, name="sprite"):
             ramp, _ = _ramp_of(legend, grid[y][x])
             if ramp is None:
                 continue
-            px[x, y] = ramp[shade_at(grid, legend, x, y)]
+            px[x, y] = ramp[shade_at(grid, legend, x, y, inlay)]
 
     if outline:
         # Grow a dark outline into the empty pixels around the silhouette. The colour is the

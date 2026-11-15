@@ -1,0 +1,18 @@
+{
+  "type": "create:mechanical_crafting",
+  "accept_mirrored": true,
+  "category": "misc",
+  "key": {
+    "P": {
+      "item": "golemancy:stone_plate"
+    }
+  },
+  "pattern": [
+    "PP",
+    "PP"
+  ],
+  "result": {
+    "count": 1,
+    "id": "golemancy:stone_head"
+  }
+}

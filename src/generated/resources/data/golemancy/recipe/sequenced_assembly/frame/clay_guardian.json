@@ -1,0 +1,93 @@
+{
+  "type": "create:sequenced_assembly",
+  "ingredient": {
+    "item": "golemancy:clay_torso_shell"
+  },
+  "results": [
+    {
+      "id": "golemancy:frame/clay_guardian"
+    }
+  ],
+  "sequence": [
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "golemancy:incomplete_frame/clay_guardian"
+        },
+        {
+          "item": "golemancy:clay_limb"
+        }
+      ],
+      "results": [
+        {
+          "id": "golemancy:incomplete_frame/clay_guardian"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "golemancy:incomplete_frame/clay_guardian"
+        },
+        {
+          "item": "golemancy:clay_limb"
+        }
+      ],
+      "results": [
+        {
+          "id": "golemancy:incomplete_frame/clay_guardian"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "golemancy:incomplete_frame/clay_guardian"
+        },
+        {
+          "item": "golemancy:clay_head"
+        }
+      ],
+      "results": [
+        {
+          "id": "golemancy:incomplete_frame/clay_guardian"
+        }
+      ]
+    },
+    {
+      "type": "create:pressing",
+      "ingredients": [
+        {
+          "item": "golemancy:incomplete_frame/clay_guardian"
+        }
+      ],
+      "results": [
+        {
+          "id": "golemancy:incomplete_frame/clay_guardian"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "golemancy:incomplete_frame/clay_guardian"
+        },
+        {
+          "item": "golemancy:core_housing"
+        }
+      ],
+      "results": [
+        {
+          "id": "golemancy:incomplete_frame/clay_guardian"
+        }
+      ]
+    }
+  ],
+  "transitional_item": {
+    "id": "golemancy:incomplete_frame/clay_guardian"
+  }
+}

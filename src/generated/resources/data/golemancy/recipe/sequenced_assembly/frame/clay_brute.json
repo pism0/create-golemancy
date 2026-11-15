@@ -1,0 +1,109 @@
+{
+  "type": "create:sequenced_assembly",
+  "ingredient": {
+    "item": "golemancy:clay_torso_shell"
+  },
+  "results": [
+    {
+      "id": "golemancy:frame/clay_brute"
+    }
+  ],
+  "sequence": [
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "golemancy:incomplete_frame/clay_brute"
+        },
+        {
+          "item": "golemancy:clay_plate"
+        }
+      ],
+      "results": [
+        {
+          "id": "golemancy:incomplete_frame/clay_brute"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "golemancy:incomplete_frame/clay_brute"
+        },
+        {
+          "item": "golemancy:clay_limb"
+        }
+      ],
+      "results": [
+        {
+          "id": "golemancy:incomplete_frame/clay_brute"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "golemancy:incomplete_frame/clay_brute"
+        },
+        {
+          "item": "golemancy:clay_limb"
+        }
+      ],
+      "results": [
+        {
+          "id": "golemancy:incomplete_frame/clay_brute"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "golemancy:incomplete_frame/clay_brute"
+        },
+        {
+          "item": "golemancy:clay_head"
+        }
+      ],
+      "results": [
+        {
+          "id": "golemancy:incomplete_frame/clay_brute"
+        }
+      ]
+    },
+    {
+      "type": "create:pressing",
+      "ingredients": [
+        {
+          "item": "golemancy:incomplete_frame/clay_brute"
+        }
+      ],
+      "results": [
+        {
+          "id": "golemancy:incomplete_frame/clay_brute"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "golemancy:incomplete_frame/clay_brute"
+        },
+        {
+          "item": "golemancy:core_housing"
+        }
+      ],
+      "results": [
+        {
+          "id": "golemancy:incomplete_frame/clay_brute"
+        }
+      ]
+    }
+  ],
+  "transitional_item": {
+    "id": "golemancy:incomplete_frame/clay_brute"
+  }
+}

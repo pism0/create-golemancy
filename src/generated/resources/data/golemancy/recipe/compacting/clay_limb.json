@@ -1,0 +1,19 @@
+{
+  "type": "create:compacting",
+  "ingredients": [
+    {
+      "item": "golemancy:clay_plate"
+    },
+    {
+      "item": "golemancy:clay_plate"
+    },
+    {
+      "item": "create:andesite_alloy"
+    }
+  ],
+  "results": [
+    {
+      "id": "golemancy:clay_limb"
+    }
+  ]
+}

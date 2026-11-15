@@ -93,6 +93,10 @@ public final class ModItems {
         }
     }
 
+    // --- Blocks -----------------------------------------------------------------------------------
+    public static final DeferredItem<net.minecraft.world.item.BlockItem> BINDING_ALTAR =
+            track(ITEMS.registerSimpleBlockItem("binding_altar", ModBlocks.BINDING_ALTAR));
+
     // --- Lifecycle items -------------------------------------------------------------------------
     public static final DeferredItem<ControlWandItem> CONTROL_WAND = track(ITEMS.register("control_wand",
             () -> new ControlWandItem(new Item.Properties().stacksTo(1))));

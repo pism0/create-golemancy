@@ -1,0 +1,8 @@
+{
+  "type": "golemancy:binding",
+  "frame": {
+    "item": "golemancy:frame/stone_guardian"
+  },
+  "golem_frame": "golemancy:guardian",
+  "golem_material": "golemancy:stone"
+}

@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "A": {
+      "item": "minecraft:amethyst_shard"
+    },
+    "C": {
+      "item": "create:andesite_casing"
+    },
+    "E": {
+      "item": "irons_spellbooks:arcane_essence"
+    },
+    "P": {
+      "item": "golemancy:stone_plate"
+    },
+    "S": {
+      "item": "create:shaft"
+    }
+  },
+  "pattern": [
+    "AEA",
+    "PCP",
+    " S "
+  ],
+  "result": {
+    "count": 1,
+    "id": "golemancy:binding_altar"
+  }
+}
