@@ -1,0 +1,9 @@
+{
+  "armor": 8.0,
+  "attack_damage": 7.0,
+  "entity_type": "golemancy:guardian",
+  "health": 60.0,
+  "knockback_resistance": 0.6,
+  "model": "guardian",
+  "movement_speed": 0.25
+}

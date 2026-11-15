@@ -1,0 +1,12 @@
+{
+  "armor": 4.0,
+  "attack_damage": 12.0,
+  "attack_interval": 30,
+  "default_profile": "soldier",
+  "energy_multiplier": 0.8,
+  "entity_type": "golemancy:brute",
+  "health": 90.0,
+  "knockback_resistance": 0.8,
+  "model": "brute",
+  "movement_speed": 0.22
+}

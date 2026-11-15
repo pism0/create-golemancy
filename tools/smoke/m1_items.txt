@@ -1,0 +1,26 @@
+# Client smoke script: <tick> <action> <argument>
+# Milestone 1: reach a world with every dependency loaded and show the item textures.
+20 cmd time set noon
+22 cmd tp @s 0.5 -60 0.5 0 20
+30 cmd clear @s
+32 cmd item replace entity @s hotbar.0 with golemancy:stone_plate
+33 cmd item replace entity @s hotbar.1 with golemancy:stone_limb
+34 cmd item replace entity @s hotbar.2 with golemancy:stone_head
+35 cmd item replace entity @s hotbar.3 with golemancy:stone_torso_shell
+36 cmd item replace entity @s hotbar.4 with golemancy:core_housing
+37 cmd item replace entity @s hotbar.5 with golemancy:core/arcane
+38 cmd item replace entity @s hotbar.6 with golemancy:core/fire
+39 cmd item replace entity @s hotbar.7 with golemancy:core/frost
+40 cmd item replace entity @s hotbar.8 with golemancy:frame/stone_guardian
+80 shot m1_hotbar_a
+90 cmd item replace entity @s hotbar.0 with golemancy:clay_plate
+91 cmd item replace entity @s hotbar.1 with golemancy:clay_limb
+92 cmd item replace entity @s hotbar.2 with golemancy:clay_head
+93 cmd item replace entity @s hotbar.3 with golemancy:clay_torso_shell
+94 cmd item replace entity @s hotbar.4 with golemancy:quenched_core_housing
+95 cmd item replace entity @s hotbar.5 with golemancy:molten_core_housing
+96 cmd item replace entity @s hotbar.6 with golemancy:frame/clay_brute
+97 cmd item replace entity @s hotbar.7 with golemancy:frame/clay_guardian
+98 cmd item replace entity @s hotbar.8 with golemancy:frame/stone_brute
+130 shot m1_hotbar_b
+140 quit

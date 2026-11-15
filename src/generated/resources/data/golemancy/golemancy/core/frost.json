@@ -1,0 +1,12 @@
+{
+  "color": 7918312,
+  "item": "golemancy:core/frost",
+  "max_energy": 2000,
+  "max_spell_level": 3,
+  "passive_drain": 0.3,
+  "resists": "#golemancy:resisted_by_core/frost",
+  "school": "irons_spellbooks:ice",
+  "spell_slots": 1,
+  "strike_slow_ticks": 60,
+  "tier": 2
+}

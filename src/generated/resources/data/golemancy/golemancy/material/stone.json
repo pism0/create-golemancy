@@ -1,0 +1,24 @@
+{
+  "absorbs": "#golemancy:absorbed_by/stone",
+  "armor_multiplier": 1.5,
+  "color": 9278364,
+  "conductivity": 0.8,
+  "health_multiplier": 1.2,
+  "knockback_resistance": 0.2,
+  "repair_item": [
+    {
+      "item": "minecraft:stone"
+    },
+    {
+      "item": "minecraft:cobblestone"
+    },
+    {
+      "item": "minecraft:smooth_stone"
+    }
+  ],
+  "resist_factor": 0.6,
+  "resists": "#golemancy:resisted_by/stone",
+  "speed_multiplier": 0.9,
+  "strike_slow_ticks": 40,
+  "texture": "stone"
+}

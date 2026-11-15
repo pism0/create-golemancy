@@ -1,0 +1,19 @@
+{
+  "values": [
+    "minecraft:in_fire",
+    "minecraft:on_fire",
+    "minecraft:lava",
+    "minecraft:hot_floor",
+    "minecraft:campfire",
+    "minecraft:fireball",
+    "minecraft:unattributed_fireball",
+    {
+      "id": "irons_spellbooks:fire_magic",
+      "required": false
+    },
+    {
+      "id": "irons_spellbooks:fire_field",
+      "required": false
+    }
+  ]
+}

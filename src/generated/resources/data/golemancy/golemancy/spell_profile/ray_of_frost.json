@@ -1,0 +1,7 @@
+{
+  "energy_cost": 45.0,
+  "min_cooldown": 160,
+  "range": 12.0,
+  "spell": "irons_spellbooks:ray_of_frost",
+  "targeting": "enemy"
+}

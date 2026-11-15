@@ -1,0 +1,9 @@
+{
+  "values": [
+    "minecraft:freeze",
+    {
+      "id": "irons_spellbooks:ice_magic",
+      "required": false
+    }
+  ]
+}

@@ -58,6 +58,15 @@ neoForge {
             systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
         }
 
+        // Automated client check: creates a flat world, plays a script from tools/smoke/, takes
+        // screenshots and exits.   ./gradlew runClientSmoke -Psmoke=m1_items
+        clientSmoke {
+            client()
+            gameDirectory = project.file('run-smoke')
+            systemProperty 'golemancy.smoke', file("tools/smoke/${findProperty('smoke') ?: 'm1_items'}.txt").absolutePath
+            programArguments.addAll '--width', '1280', '--height', '720'
+        }
+
         gameTestServer {
             type = 'gameTestServer'
             systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id

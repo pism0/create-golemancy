@@ -1,0 +1,14 @@
+{
+  "absorbs": "#golemancy:absorbed_by/clay",
+  "affinity": "irons_spellbooks:nature",
+  "armor_multiplier": 0.6,
+  "color": 12152137,
+  "knockback_resistance": 0.1,
+  "repair_item": {
+    "item": "minecraft:clay_ball"
+  },
+  "resists": "#golemancy:resisted_by/clay",
+  "speed_multiplier": 0.85,
+  "texture": "clay",
+  "water_regen": 1.0
+}

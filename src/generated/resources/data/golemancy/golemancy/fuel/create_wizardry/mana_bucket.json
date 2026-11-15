@@ -1,0 +1,12 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "create_wizardry"
+    }
+  ],
+  "energy": 2400,
+  "ingredient": {
+    "item": "create_wizardry:mana_bucket"
+  }
+}

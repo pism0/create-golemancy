@@ -1,0 +1,9 @@
+{
+  "energy_cost": 60.0,
+  "min_cooldown": 300,
+  "range": 0.0,
+  "requires_los": false,
+  "school_neutral": true,
+  "spell": "irons_spellbooks:shield",
+  "targeting": "self"
+}

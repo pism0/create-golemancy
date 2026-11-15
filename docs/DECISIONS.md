@@ -93,3 +93,42 @@ Iron's Spells reports `1.21.1-3.16.3`. The range used is `[1.21.1-3.16.3,)` (Mav
 `1.21.1` then the `-3.16.3` qualifier numerically, so later 1.21.1 builds are accepted). Create is
 `[6.0.10,6.1.0)`, GeckoLib `[4.9.3,)`. These are exercised by every dev run: the game refuses to
 start if a range rejects the real version string. Result recorded in `docs/PROGRESS.md` (M1).
+
+## D-010 Spec ids vs item ids
+
+SDD 4.3's example comments show `frame = golemancy:frame/stone_guardian` and
+`core = golemancy:core/fire`. Those are the *item* ids. In the spec, `frame`, `material` and `core`
+hold ids of the datapack registries (`golemancy:guardian`, `golemancy:stone`, `golemancy:fire`),
+because the material is its own field and SDD 5.3 defines two frames (Guardian, Brute), not four.
+The record shape, field names and order follow SDD 4.3 exactly. The item ↔ definition mapping is
+data: a core definition names its item, and a `golemancy:binding` recipe names the frame and
+material its frame item produces.
+
+A shattered core (integrity 0, SDD 11.3) is stored as `core = golemancy:none`; "no owner" is the
+nil UUID. Energy and health of a packed-up golem live in a second component,
+`golemancy:construct_state`, not in the spec, because the spec is the design and SDD 4.3 fixes its
+fields.
+
+## D-011 Curated spell list (v0.1)
+
+Four spells, all `CastType.INSTANT` in Iron's 3.16.3 and all aimed purely by where the caster is
+looking, which is what makes them safe for a non-Iron's entity (D-007):
+
+| Spell | School | Why |
+| --- | --- | --- |
+| `irons_spellbooks:firebolt` | Fire | Projectile along the look vector; the SDD's "one fire bolt". |
+| `irons_spellbooks:icicle` | Ice | Same shape for the Frost Core; the SDD's "one ice projectile". |
+| `irons_spellbooks:ray_of_frost` | Ice | Instant raycast; gives the Frost Core a second, heavier option. |
+| `irons_spellbooks:shield` | Evocation, marked school-neutral | Defensive ward placed in front of the caster; the SDD's "one shield or ward". |
+
+Rejected for v0.1: continuous spells (fire breath, cone of cold: need per-tick cast state),
+teleports and dashes (need Iron's mob-only helpers), summons (need `SummonManager`), anything with a
+recast or a player-only precondition. The Arcane Core has no spell slot (SDD 6.2), so a
+school-neutral spell still needs a Fire or Frost core.
+
+## D-012 No OpenGL on the build machine
+
+The build VM has no GPU or OpenGL driver, so the client cannot be launched there (details in
+PROGRESS.md, M1). A software renderer (Mesa llvmpipe for Windows) would make in-game checks and
+screenshots possible, but it is a third-party binary download, so it was not installed without the
+owner's approval. `./gradlew runClientSmoke -Psmoke=<script>` is ready for a machine with a GPU.

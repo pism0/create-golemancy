@@ -1,0 +1,6 @@
+{
+  "energy_cost": 20.0,
+  "min_cooldown": 50,
+  "spell": "irons_spellbooks:firebolt",
+  "targeting": "enemy"
+}
