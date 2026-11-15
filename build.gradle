@@ -1,0 +1,165 @@
+plugins {
+    id 'java-library'
+    id 'net.neoforged.moddev' version '2.0.148'
+    id 'idea'
+}
+
+version = mod_version
+group = mod_group_id
+
+boolean withWizardry = (findProperty('with_wizardry') ?: 'true').toString().toBoolean()
+
+sourceSets.main.resources {
+    // Committed datagen output
+    srcDir('src/generated/resources')
+    exclude('**/*.bbmodel')
+    exclude('.cache/**')
+}
+
+repositories {
+    maven { name = 'Create, Ponder, Flywheel'; url = 'https://maven.createmod.net' }
+    maven { name = 'Registrate'; url = 'https://maven.ithundxr.dev/snapshots' }
+    maven { name = "Iron's Maven - Release"; url = 'https://code.redspace.io/releases' }
+    maven {
+        name = 'GeckoLib'
+        url = 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/'
+        content { includeGroupByRegex('software\\.bernie.*'); includeGroup('com.eliotlash.mclib') }
+    }
+    maven { name = 'JEI'; url = 'https://maven.blamejared.com/'; content { includeGroup('mezz.jei') } }
+    exclusiveContent {
+        forRepository { maven { name = 'Modrinth'; url = 'https://api.modrinth.com/maven' } }
+        filter { includeGroup('maven.modrinth') }
+    }
+}
+
+base {
+    archivesName = mod_id
+}
+
+java.toolchain.languageVersion = JavaLanguageVersion.of(21)
+
+neoForge {
+    version = project.neo_version
+
+    parchment {
+        mappingsVersion = project.parchment_mappings_version
+        minecraftVersion = project.parchment_minecraft_version
+    }
+
+    runs {
+        client {
+            client()
+            systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
+        }
+
+        server {
+            server()
+            programArgument '--nogui'
+            systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
+        }
+
+        gameTestServer {
+            type = 'gameTestServer'
+            systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
+        }
+
+        data {
+            data()
+            programArguments.addAll '--mod', project.mod_id, '--all',
+                    '--output', file('src/generated/resources/').getAbsolutePath(),
+                    '--existing', file('src/main/resources/').getAbsolutePath()
+        }
+
+        configureEach {
+            systemProperty 'forge.logging.markers', 'REGISTRIES'
+            logLevel = org.slf4j.event.Level.INFO
+        }
+    }
+
+    mods {
+        "${mod_id}" {
+            sourceSet(sourceSets.main)
+        }
+    }
+}
+
+configurations {
+    runtimeClasspath.extendsFrom localRuntime
+}
+
+dependencies {
+    // --- Create (compiled against; internals confined to integration.create) ---
+    implementation("com.simibubi.create:create-${minecraft_version}:${create_version}:slim") { transitive = false }
+    implementation("net.createmod.ponder:ponder-neoforge:${ponder_version}+mc${minecraft_version}")
+    compileOnly("dev.engine-room.flywheel:flywheel-neoforge-api-${minecraft_version}:${flywheel_version}")
+    runtimeOnly("dev.engine-room.flywheel:flywheel-neoforge-${minecraft_version}:${flywheel_version}")
+    implementation("com.tterrag.registrate:Registrate:${registrate_version}")
+
+    // --- Iron's Spells 'n Spellbooks: API jar only at compile time (SDD 7.1) ---
+    compileOnly "io.redspace:irons_spellbooks:${irons_spells_version}:api"
+    localRuntime "io.redspace:irons_spellbooks:${irons_spells_version}"
+    localRuntime "io.redspace:irons_lib:${irons_lib_version}"
+    // Runtime requirements of Iron's Spells
+    localRuntime "maven.modrinth:curios:${curios_version}"
+    localRuntime "maven.modrinth:playeranimator:${player_animator_version}"
+
+    // --- GeckoLib ---
+    implementation "software.bernie.geckolib:geckolib-neoforge-${minecraft_version}:${geckolib_version}"
+
+    // --- JEI: API at compile time, full mod at dev runtime only ---
+    compileOnly "mezz.jei:jei-${minecraft_version}-common-api:${jei_version}"
+    compileOnly "mezz.jei:jei-${minecraft_version}-neoforge-api:${jei_version}"
+    localRuntime("mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}") { transitive = false }
+
+    // --- Create: Wizardry: runtime-only, NEVER compileOnly/implementation (SDD 9) ---
+    if (withWizardry) {
+        localRuntime "maven.modrinth:create-wizardry:${create_wizardry_version}"
+    }
+}
+
+var generateModMetadata = tasks.register('generateModMetadata', ProcessResources) {
+    var replaceProperties = [
+            minecraft_version      : minecraft_version,
+            minecraft_version_range: minecraft_version_range,
+            neo_version            : neo_version,
+            loader_version_range   : loader_version_range,
+            mod_id                 : mod_id,
+            mod_name               : mod_name,
+            mod_license            : mod_license,
+            mod_version            : mod_version,
+            mod_authors            : mod_authors,
+            create_release_version : create_release_version,
+            irons_spells_version   : irons_spells_version,
+            geckolib_version       : geckolib_version,
+    ]
+    inputs.properties replaceProperties
+    expand replaceProperties
+    from 'src/main/templates'
+    into 'build/generated/sources/modMetadata'
+}
+sourceSets.main.resources.srcDir generateModMetadata
+neoForge.ideSyncTask generateModMetadata
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+}
+
+// Prints the jar paths of the runtime mods so ids can be verified against the pinned versions
+// (tools/verify_ids.py reads this output).
+tasks.register('printRuntimeMods') {
+    doLast {
+        configurations.runtimeClasspath.resolvedConfiguration.resolvedArtifacts.each {
+            def g = it.moduleVersion.id.group
+            if (g in ['io.redspace', 'maven.modrinth', 'com.simibubi.create', 'software.bernie.geckolib', 'mezz.jei', 'net.createmod.ponder']) {
+                println "MODJAR ${it.moduleVersion.id} -> ${it.file}"
+            }
+        }
+    }
+}
+
+idea {
+    module {
+        downloadSources = true
+        downloadJavadoc = true
+    }
+}
