@@ -8,7 +8,7 @@ Target: v0.1 release candidate = Milestones 0–4 (SDD 17, 18). Gates are derive
 | Phase 0 Environment | JDK 21, git, wrapper, pinned deps resolve | **Passed** |
 | M0 Prototypes | Three spikes answered and written up; v0.1 assembly design confirmed | **Passed** |
 | M1 Foundation | Builds; datagen runs; GameTest harness runs; loads with and without Create: Wizardry | **Passed** (client launch not verifiable here, see below) |
-| M2 First golem | Stone Guardian spawns from an item with a GeckoLib model, persists its spec, fights | Not started |
+| M2 First golem | Stone Guardian spawns from an item with a GeckoLib model, persists its spec, fights | **Passed** (rendering not verifiable here) |
 | M3 Manufacturing | Parts → frame → core → Binding Altar → Dormant Golem, automatable; JEI + Ponder | Not started |
 | M4 Magic and lifecycle | SDD 20.1 loop complete; all GameTests pass; `playtest/` prepared | Not started |
 
@@ -90,3 +90,48 @@ Mod loading itself (all dependency mods + Golemancy, both Wizardry setups) is ve
 GameTest server, which uses the same mod list.
 
 Gate: **passed**, with the client launch explicitly unverified.
+
+## M2 — First golem (2026-11-15)
+
+Plan (SDD 4.3, 10, 11.1, 12.5, 15.3): one construct entity class registered per frame; attributes
+derived from the spec; GeckoLib model, textures, glowmask and all eight animations; spec persistence
+with the SDD 15.3 load sequence; a spawn item (Dormant Golem); Guardian/Soldier combat AI on the
+vanilla goal selector through `IGolemBehavior` / `IGolemJob`.
+
+What changed:
+
+- `entity.ConstructEntity` (entity types `golemancy:guardian`, `golemancy:brute`), synced render
+  data only (material, core, energy %, state, owner); `ConstructAttributes` applies
+  frame × material × config as transient modifiers with fixed ids.
+- Persistence: decode → migrate → sanitise → recalculate; unreadable data becomes Construct Remains
+  with whatever ids could be salvaged.
+- `ai`: `JobRunnerGoal`, `IGolemBehavior` (Guardian, Soldier), `IGolemJob` (idle, melee, return
+  home, follow owner, cast spell), `Targeting`, staggered decision ticks.
+- `lifecycle`: `DormantGolemItem`, `ConstructRemainsItem`, `ControlWandItem`, `GolemLifecycle`
+  (deploy, pack up, remains, interaction), `Ownership`.
+- `magic`: `IConstructEnergy`, `ISpellCaster`, `IAffinitySource` and their registration point.
+- Client: `ConstructRenderer` + `ConstructModel`, `CoreGlowLayer` (emissive `*_core_glowmask.png`
+  tinted by core colour, dims with energy), optional bones hidden, layered tinted item sprites.
+- Art: `tools/art/entities.py` generates geo, animations, textures and glowmasks from one cube list
+  (UVs cannot drift). Guardian and Brute at 128x128, block texel density. Contact sheets:
+  `art/previews/entities.png` (texture + UV layout + views) and `entities_views.png`.
+  Critique: silhouettes read (Guardian upright with shield forearm, Brute wide and low), brass
+  straps and the chest socket separate them from any vanilla golem; kept as is.
+
+Gate checks:
+
+| Check | Result |
+| --- | --- |
+| `./gradlew build`, `runData` | pass |
+| `runGameTestServer` | pass, 15/15 |
+| Spawn item places the right entity with its spec (`dormantItemDeploysGolemWithSpec`) | pass |
+| Spec/energy/health persist (`golemPersistsThroughSaveAndLoad`) | pass |
+| Combat AI (`guardianAttacksHostile`, `combatToggleIsRespected`) | pass |
+| Ownership (`golemNeverTargetsOwner`) | pass |
+| Models and animations parse with GeckoLib; all bones/animations present (`geckoLibAssetsParse`) | pass |
+| In-game rendering and animation | not verifiable here → `docs/PLAYTEST.md` |
+
+Open issues: animation rotation signs and the head-tracking sign follow the Bedrock/GeckoLib
+conventions but have never been seen in motion; listed as a playtest check.
+
+Gate: **passed**.

@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "golemancy:item/dormant_golem_body",
+    "layer1": "golemancy:item/dormant_golem_core",
+    "layer2": "golemancy:item/dormant_golem_base"
+  }
+}

@@ -28,4 +28,10 @@ public final class ModDataComponents {
             COMPONENTS.registerComponentType("construct_state", builder -> builder
                     .persistent(ConstructState.CODEC)
                     .networkSynchronized(ConstructState.STREAM_CODEC));
+
+    /** {@code golemancy:linked_golem}: the golem a Control Wand last handled. */
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<java.util.UUID>> LINKED_GOLEM =
+            COMPONENTS.registerComponentType("linked_golem", builder -> builder
+                    .persistent(net.minecraft.core.UUIDUtil.CODEC)
+                    .networkSynchronized(net.minecraft.core.UUIDUtil.STREAM_CODEC));
 }

@@ -2,9 +2,14 @@ package io.github.pism0.golemancy.core;
 
 import com.simibubi.create.content.processing.sequenced.SequencedAssemblyItem;
 import io.github.pism0.golemancy.Golemancy;
+import io.github.pism0.golemancy.data.ConstructState;
+import io.github.pism0.golemancy.data.GolemSpec;
+import io.github.pism0.golemancy.lifecycle.ConstructRemainsItem;
+import io.github.pism0.golemancy.lifecycle.ControlWandItem;
+import io.github.pism0.golemancy.lifecycle.DormantGolemItem;
+import io.github.pism0.golemancy.lifecycle.GolemLifecycle;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -88,11 +93,31 @@ public final class ModItems {
         }
     }
 
+    // --- Lifecycle items -------------------------------------------------------------------------
+    public static final DeferredItem<ControlWandItem> CONTROL_WAND = track(ITEMS.register("control_wand",
+            () -> new ControlWandItem(new Item.Properties().stacksTo(1))));
+    /** Not tracked: only meaningful with a spec, so the tab lists ready-made examples instead. */
+    public static final DeferredItem<DormantGolemItem> DORMANT_GOLEM = ITEMS.register("dormant_golem",
+            () -> new DormantGolemItem(new Item.Properties().stacksTo(1)));
+    public static final DeferredItem<ConstructRemainsItem> CONSTRUCT_REMAINS = ITEMS.register("construct_remains",
+            () -> new ConstructRemainsItem(new Item.Properties().stacksTo(1).fireResistant()));
+
     public static final DeferredHolder<CreativeModeTab, CreativeModeTab> TAB = TABS.register("main",
             () -> CreativeModeTab.builder()
                     .title(Component.translatable("itemGroup.golemancy.main"))
                     .icon(() -> new ItemStack(CORE_ITEMS.get("fire").get()))
-                    .displayItems((params, output) -> TAB_ORDER.forEach(item -> output.accept(item.get())))
+                    .displayItems((params, output) -> {
+                        TAB_ORDER.forEach(item -> output.accept(item.get()));
+                        // Ready-to-deploy golems: every material x frame with each core.
+                        for (String material : MATERIALS) {
+                            for (String frame : FRAMES) {
+                                for (String core : CORES) {
+                                    GolemSpec spec = GolemSpec.create(Golemancy.id(frame), Golemancy.id(material), Golemancy.id(core));
+                                    output.accept(GolemLifecycle.dormantStack(spec, ConstructState.FRESH));
+                                }
+                            }
+                        }
+                    })
                     .build());
 
     public static DeferredItem<Item> part(String material, String kind) {
