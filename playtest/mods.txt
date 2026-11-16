@@ -1,0 +1,48 @@
+Create: Golemancy 0.1.0-rc1 - playtest mod list
+Minecraft 1.21.1, NeoForge 21.1.266 (any 21.1.221 or newer works; Iron's Lib needs at least 21.1.221)
+
+Put every jar below into the instance's mods folder. Versions are the ones Golemancy was built and
+tested against (see docs/VERSIONS.md). "File" is the file name on the download page.
+
+REQUIRED
+--------
+Create: Golemancy 0.1.0-rc1
+    File:  golemancy-0.1.0-rc1.jar   (in this folder)
+
+Create 6.0.10
+    File:  create-1.21.1-6.0.10.jar
+    Page:  https://modrinth.com/mod/create/versions?g=1.21.1&l=neoforge
+           https://www.curseforge.com/minecraft/mc-mods/create
+    Note:  Ponder, Flywheel and Registrate are bundled inside the Create jar.
+
+Iron's Spells 'n Spellbooks 1.21.1-3.16.3
+    File:  irons_spellbooks-1.21.1-3.16.3.jar
+    Page:  https://modrinth.com/mod/irons-spells-n-spellbooks/versions?g=1.21.1&l=neoforge
+           https://www.curseforge.com/minecraft/mc-mods/irons-spells-n-spellbooks
+
+Iron's Lib 1.21.1-2.3.0            (required by Iron's Spells)
+    File:  irons_lib-1.21.1-2.3.0.jar
+    Page:  https://modrinth.com/mod/irons-lib/versions?g=1.21.1&l=neoforge
+
+GeckoLib 4.9.3
+    File:  geckolib-neoforge-1.21.1-4.9.3.jar
+    Page:  https://modrinth.com/mod/geckolib/versions?g=1.21.1&l=neoforge
+
+Curios API 9.5.1+1.21.1            (required by Iron's Spells)
+    File:  curios-neoforge-9.5.1+1.21.1.jar
+    Page:  https://modrinth.com/mod/curios/versions?g=1.21.1&l=neoforge
+
+Player Animator 2.0.4+1.21.1       (required by Iron's Spells)
+    File:  player-animation-lib-forge-2.0.4+1.21.1.jar
+    Page:  https://modrinth.com/mod/playeranimator/versions?g=1.21.1&l=neoforge
+
+OPTIONAL
+--------
+JEI 19.70.0.469                    (recipe viewer; Binding Altar category)
+    File:  jei-1.21.1-neoforge-19.70.0.469.jar
+    Page:  https://modrinth.com/mod/jei/versions?g=1.21.1&l=neoforge
+
+Create: Wizardry 1.21.1-0.5.0      (extra recipe, fuel and altar catalyst; data-only integration)
+    File:  create_wizardry-1.21.1-0.5.0.jar
+    Page:  https://modrinth.com/mod/create-wizardry/versions?g=1.21.1&l=neoforge
+    Note:  0.5.0 accepts Create 6.0.6 to 6.0.10 and Iron's Spells 3.15.0 up to (not including) 3.17.0.

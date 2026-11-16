@@ -74,6 +74,35 @@ final class ModContentLang {
         lang.add("golemancy.altar.progress", "Binding: %s%%");
         lang.add("golemancy.altar.catalyst", "Catalyst: %1$s (%2$s mB)");
 
+        // --- Configuration screen ---------------------------------------------------------------
+        lang.add("golemancy.screen.tab.overview", "Overview");
+        lang.add("golemancy.screen.tab.core", "Core");
+        lang.add("golemancy.screen.tab.behaviour", "Behaviour");
+        lang.add("golemancy.screen.frame", "Frame: %s");
+        lang.add("golemancy.screen.material", "Material: %s");
+        lang.add("golemancy.screen.owner", "Owner: %s");
+        lang.add("golemancy.screen.owner.none", "nobody");
+        lang.add("golemancy.screen.health", "Health: %1$s / %2$s");
+        lang.add("golemancy.screen.state.active", "Active");
+        lang.add("golemancy.screen.state.activating", "Waking up");
+        lang.add("golemancy.screen.state.powered_down", "Powered down: feed it a fuel item");
+        lang.add("golemancy.screen.core", "Core: %s");
+        lang.add("golemancy.screen.school", "School: %s");
+        lang.add("golemancy.screen.school.none", "none (neutral)");
+        lang.add("golemancy.screen.energy", "Energy: %1$s / %2$s");
+        lang.add("golemancy.screen.drain", "Idle drain: %s per minute");
+        lang.add("golemancy.screen.integrity", "Core integrity: %s%%");
+        lang.add("golemancy.screen.spells.none", "No spell installed");
+        lang.add("golemancy.screen.profile", "Profile: %s");
+        lang.add("golemancy.screen.move_mode", "Move: %s");
+        lang.add("golemancy.screen.combat", "Combat: %s");
+        lang.add("golemancy.screen.cast_spells", "Spells: %s");
+        lang.add("golemancy.screen.radius", "Radius: %s blocks");
+        lang.add("golemancy.screen.set_home", "Set home here");
+        lang.add("golemancy.screen.home", "Home: %1$s, %2$s, %3$s");
+        lang.add("golemancy.screen.home.none", "Home: not set");
+        lang.add("golemancy.screen.pack_up", "Pack up");
+
         // --- JEI ----------------------------------------------------------------------------------
         lang.add("golemancy.jei.binding", "Binding Altar");
         lang.add("golemancy.jei.bind", "Bind");

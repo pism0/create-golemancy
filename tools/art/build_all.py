@@ -19,7 +19,7 @@ ASSETS = os.path.join(ROOT, "src", "main", "resources", "assets", "golemancy")
 
 # Optional stages, added as the milestones that need them land.
 OPTIONAL = []
-for _name in ("blocks", "entities", "gui", "logo"):
+for _name in ("blocks", "entities", "gui"):
     try:
         OPTIONAL.append(__import__(_name))
     except ModuleNotFoundError:

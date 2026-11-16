@@ -18,6 +18,7 @@ public final class Golemancy {
 
     public Golemancy(IEventBus modBus, ModContainer container) {
         ModRegistries.register(modBus);
+        io.github.pism0.golemancy.core.network.GolemNetwork.register(modBus);
         io.github.pism0.golemancy.integration.create.CreateIntegration.register(modBus);
         container.registerConfig(ModConfig.Type.SERVER, GolemancyConfig.SPEC);
         // Iron's Spells is a required dependency, so its adapter is always registered.

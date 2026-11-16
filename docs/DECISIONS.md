@@ -177,3 +177,21 @@ An automated Binding Altar can run before anyone logs in, so `IronsSpellCaster.s
 to the spell's built-in school when the configured value is just the global default. Found by the
 GameTests (which run with no player). Side effect: a modpack that deliberately moves an allow-listed
 spell *to* evocation is read as its built-in school.
+
+## D-017 Smaller v0.1 interpretations (all reversible, none removes a scoped feature)
+
+- **Team:** the "optional team" of SDD 11.4 is the owner's vanilla scoreboard team, looked up live;
+  no separate team id is stored in the spec.
+- **Unowned golems:** an altar output has no owner. The first player to deploy it (or, for a golem
+  deployed by a machine, the first to handle it) becomes the owner.
+- **Fuel and field repair** can be given by anyone, including deployers; configuration, pack-up and
+  redeploying are owner/team/operator only.
+- **Guardian + Follow** guards its owner instead of a fixed home; **Soldier + Stay** holds position
+  but still attacks what it notices. The screen exposes profile and move mode separately.
+- **Spell use:** ranged spells are cast when the target is 3 blocks or more away (melee otherwise);
+  the Shield is cast in combat below 75% health. Spell level is capped by the core.
+- **Control Wand home:** using the wand on a golem links it; using it on a block then sets that
+  golem's home (within 64 blocks). Radius is set in the screen.
+- **Work areas, linked inventories, `IGolemWorkArea`, `IGolemInventoryAccess`:** Milestone 6 in the
+  SDD; not created as empty interfaces.
+- **Custom sounds:** none; vanilla sound events only, as instructed.
