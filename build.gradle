@@ -149,6 +149,25 @@ var generateModMetadata = tasks.register('generateModMetadata', ProcessResources
 sourceSets.main.resources.srcDir generateModMetadata
 neoForge.ideSyncTask generateModMetadata
 
+// Writes the classpath of the clientSmoke run as a java argument file, so the client can be started
+// with a different java executable than Gradle's toolchain (see tools/run_client_direct.sh).
+tasks.register('writeClientSmokeClasspath') {
+    dependsOn 'prepareClientSmokeRun', 'classes'
+    def out = layout.buildDirectory.file('moddev/clientSmokeClasspathArg.txt')
+    outputs.file(out)
+    outputs.upToDateWhen { false }
+    doLast {
+        def run = tasks.named('runClientSmoke').get()
+        def files = new LinkedHashSet<File>()
+        files.addAll(run.classpathProvider.files)
+        if (files.isEmpty()) files.addAll(run.classpath.files)
+        def cp = files
+                .collect { it.absolutePath.replace(File.separator, '/') }
+                .join(File.pathSeparator)
+        out.get().asFile.text = '-cp\n"' + cp + '"\n'
+    }
+}
+
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
 }

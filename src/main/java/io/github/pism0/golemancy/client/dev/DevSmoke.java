@@ -58,10 +58,16 @@ public final class DevSmoke {
 
     @SubscribeEvent
     public static void onScreenOpening(ScreenEvent.Opening event) {
-        if (!enabled() || worldRequested || !(event.getNewScreen() instanceof TitleScreen)) return;
+        if (!enabled() || worldRequested) return;
+        // A fresh game directory shows the accessibility onboarding screen before the title screen.
+        boolean firstScreen = event.getNewScreen() instanceof TitleScreen
+                || event.getNewScreen() instanceof net.minecraft.client.gui.screens.AccessibilityOnboardingScreen;
+        if (!firstScreen) return;
         worldRequested = true;
         Minecraft mc = Minecraft.getInstance();
         mc.options.pauseOnLostFocus = false;
+        mc.options.onboardAccessibility = false;
+        Golemancy.LOGGER.info("[smoke] first screen: {}", event.getNewScreen().getClass().getSimpleName());
         mc.execute(() -> {
             try {
                 steps = loadScript(Path.of(SCRIPT));
