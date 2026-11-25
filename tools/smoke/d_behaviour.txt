@@ -1,0 +1,61 @@
+# PLAYTEST section D, scripted: golems deployed by the player, fighting, casting, dying, rebuilt.
+#   tools/run_client_direct.sh <java> d_behaviour 1500
+# Golems are deployed with the player's own right-click, so the player becomes their owner.
+20 cmd time set noon
+21 cmd gamerule doMobSpawning false
+22 cmd gamerule doDaylightCycle false
+23 cmd difficulty normal
+24 cmd gamemode survival
+25 cmd effect give @s minecraft:resistance infinite 4 true
+26 cmd effect give @s minecraft:regeneration infinite 4 true
+# --- D2/D3: a Fire-core Stone Guardian with Firebolt guards a post -----------------------------------
+30 cmd tp @s 0.5 -60 -4.5 0 30
+32 cmd item replace entity @s weapon.mainhand with golemancy:dormant_golem[golemancy:golem_spec={schema:1,frame:"golemancy:guardian",material:"golemancy:stone",core:"golemancy:fire",spells:[{spell:"irons_spellbooks:firebolt",level:1}]}]
+34 use 0 -61 0 up
+40 cmd tp @s 0.5 -60 -9.5 0 15
+# A husk (does not burn in daylight) walks in 9 blocks away, inside the 12-block guard radius.
+100 cmd summon husk 9.5 -60 0.5 {PersistenceRequired:1b}
+110 gui false
+140 shot nogui_d_guardian_engage_1
+150 shot nogui_d_guardian_engage_2
+180 cmd data get entity @e[type=husk,limit=1] Health
+200 cmd data get entity @e[type=golemancy:guardian,limit=1] GolemEnergy
+260 cmd data get entity @e[type=husk,limit=1] Health
+300 cmd execute if entity @e[type=husk] run say husk still alive
+301 cmd execute unless entity @e[type=husk] run say husk is dead
+# After the fight the Guardian walks back to its post at 0,0.
+400 cmd data get entity @e[type=golemancy:guardian,limit=1] Pos
+401 cmd data get entity @e[type=golemancy:guardian,limit=1] GolemSpec.behavior
+# --- D2: a Soldier follows its owner and attacks what the owner hits ------------------------------
+420 cmd tp @s 20.5 -60 -4.5 0 30
+422 cmd item replace entity @s weapon.mainhand with golemancy:dormant_golem[golemancy:golem_spec={schema:1,frame:"golemancy:brute",material:"golemancy:clay",core:"golemancy:frost",behavior:{profile:"soldier",move_mode:"follow"}}]
+424 use 20 -61 0 up
+430 cmd tp @s 20.5 -60 -14.5 0 0
+# A neutral target the soldier would not pick on its own: a pig the owner punches.
+480 cmd summon minecraft:pig 21.5 -60 -16.5 {NoAI:1b}
+490 cmd item replace entity @s weapon.mainhand with minecraft:air
+492 attackentity minecraft:pig
+760 cmd data get entity @e[type=golemancy:brute,limit=1] Pos
+761 cmd execute if entity @e[type=pig] run say pig still alive
+762 cmd execute unless entity @e[type=pig] run say pig is dead
+# --- D6: death drops Remains; Remains are rebuilt at the altar ------------------------------------
+800 cmd tp @s 40.5 -60 -4.5 0 30
+802 cmd item replace entity @s weapon.mainhand with golemancy:dormant_golem[golemancy:golem_spec={schema:1,frame:"golemancy:brute",material:"golemancy:clay",core:"golemancy:fire"}]
+804 use 40 -61 0 up
+840 cmd kill @e[type=golemancy:brute,x=40,y=-60,z=0,distance=..4]
+900 cmd execute as @e[type=item,x=40,y=-60,z=0,distance=..6] run data get entity @s Item
+902 cmd tp @e[type=item,x=40,y=-60,z=0,distance=..6] 40.5 -60 -4.5
+903 cmd tp @s 40.5 -60 -4.5 0 30
+905 cmd data get entity @s SelectedItem
+906 cmd setblock 44 -60 0 create:creative_motor[facing=up]{ScrollValue:64}
+907 cmd setblock 44 -59 0 golemancy:binding_altar
+910 cmd tp @s 44.5 -60 -2.5 0 20
+# The player picked up the dropped Remains (main hand, now empty after deploying) and puts them,
+# 4 clay balls and a redstone dust on the altar by hand.
+924 use 44 -59 0 north
+926 cmd item replace entity @s weapon.mainhand with minecraft:clay_ball 4
+928 use 44 -59 0 north
+930 cmd item replace entity @s weapon.mainhand with minecraft:redstone 1
+932 use 44 -59 0 north
+1120 cmd data get block 44 -59 0 Output
+1150 quit

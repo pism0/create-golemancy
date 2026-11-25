@@ -1,0 +1,130 @@
+# PLAYTEST section C on real Create machines, scripted.
+#   tools/run_client_direct.sh <java> c_factory 1500
+# One row of stations along z = 10, all powered by creative motors at 64 RPM. Inputs are dropped as
+# item entities (depots, basins and funnels pick them up) or placed with the player's own right-click
+# ("use"). Results are printed to chat with /data get and land in the client log.
+20 cmd time set noon
+21 cmd gamerule doMobSpawning false
+22 cmd gamerule doDaylightCycle false
+# --- C1 parts: saw (smooth stone -> stone plates) ---------------------------------------------
+30 cmd setblock -1 -60 10 create:creative_motor[facing=east]{ScrollValue:64}
+31 cmd setblock 0 -60 10 create:mechanical_saw[facing=up,axis_along_first=true]
+# --- C1 parts: press on depot (clay block -> clay plates) --------------------------------------
+32 cmd setblock 4 -60 10 create:depot
+33 cmd setblock 4 -58 10 create:mechanical_press[facing=north]
+34 cmd setblock 4 -58 11 create:creative_motor[facing=north]{ScrollValue:64}
+# --- C1 parts: basin + press compacting (2 plates + andesite alloy -> limb) --------------------
+35 cmd setblock 8 -60 10 create:basin
+36 cmd setblock 8 -58 10 create:mechanical_press[facing=north]
+37 cmd setblock 8 -58 11 create:creative_motor[facing=north]{ScrollValue:64}
+# --- C1 parts: 2x2 mechanical crafters (4 stone plates -> stone head) --------------------------
+38 cmd setblock 11 -60 10 create:cogwheel[axis=z]
+39 cmd setblock 11 -60 11 create:creative_motor[facing=north]{ScrollValue:64}
+40 cmd setblock 12 -60 10 create:mechanical_crafter[facing=north,pointing=down]{ConnectedInput:{Controller:1b,Data:[{X:0,Y:0,Z:0},{X:1,Y:0,Z:0},{X:0,Y:1,Z:0},{X:1,Y:1,Z:0}]}}
+41 cmd setblock 13 -60 10 create:mechanical_crafter[facing=north,pointing=right]{ConnectedInput:{Controller:0b,Data:[{X:-1,Y:0,Z:0}]}}
+42 cmd setblock 12 -59 10 create:mechanical_crafter[facing=north,pointing=down]{ConnectedInput:{Controller:0b,Data:[{X:0,Y:-1,Z:0}]}}
+43 cmd setblock 13 -59 10 create:mechanical_crafter[facing=north,pointing=down]{ConnectedInput:{Controller:0b,Data:[{X:-1,Y:-1,Z:0}]}}
+# --- C2 frame line: depot with a deployer above (swapped for a press for the press step) -------
+50 cmd setblock 18 -60 10 create:depot
+51 cmd setblock 17 -58 10 create:creative_motor[facing=east]{ScrollValue:64}
+52 cmd setblock 18 -58 11 create:creative_motor[facing=north]{ScrollValue:64}
+53 cmd setblock 18 -58 10 create:deployer[facing=down,axis_along_first=false]
+# --- C3 core housing line: same pattern -----------------------------------------------------------
+54 cmd setblock 22 -60 10 create:depot
+55 cmd setblock 21 -58 10 create:creative_motor[facing=east]{ScrollValue:64}
+56 cmd setblock 22 -58 11 create:creative_motor[facing=north]{ScrollValue:64}
+57 cmd setblock 22 -58 10 create:deployer[facing=down,axis_along_first=false]
+# --- C3 spouts over depots (water, lava) -----------------------------------------------------------
+58 cmd setblock 26 -60 10 create:depot
+59 cmd setblock 26 -58 10 create:spout
+60 cmd setblock 30 -60 10 create:depot
+61 cmd setblock 30 -58 10 create:spout
+# --- C3 mixers: heated basin (blaze burner) and an unheated one ---------------------------------
+62 cmd setblock 34 -60 10 create:blaze_burner[blaze=kindled]{fuelLevel:1,burnTimeRemaining:999999}
+63 cmd setblock 34 -59 10 create:basin
+64 cmd setblock 34 -57 10 create:mechanical_mixer
+65 cmd setblock 35 -57 10 create:cogwheel[axis=y]
+69 cmd setblock 35 -58 10 create:creative_motor[facing=up]{ScrollValue:64}
+66 cmd setblock 38 -60 10 create:basin
+67 cmd setblock 38 -58 10 create:mechanical_mixer
+68 cmd setblock 39 -58 10 create:cogwheel[axis=y]
+74 cmd setblock 39 -59 10 create:creative_motor[facing=up]{ScrollValue:64}
+# --- C4 altar between an inserting funnel (north) and an extracting funnel (south) -------------
+70 cmd setblock 42 -60 10 create:creative_motor[facing=up]{ScrollValue:64}
+71 cmd setblock 42 -59 10 golemancy:binding_altar
+72 cmd setblock 42 -59 9 create:andesite_funnel[facing=north]
+73 cmd setblock 42 -59 11 create:andesite_funnel[facing=south,extracting=true]
+# --- Inputs -----------------------------------------------------------------------------------------
+100 cmd summon item 0.5 -58.8 10.5 {Item:{id:"minecraft:smooth_stone",count:1},Motion:[0.0,0.0,0.0]}
+101 cmd summon item 4.5 -59.0 10.5 {Item:{id:"minecraft:clay",count:1},Motion:[0.0,0.0,0.0]}
+102 cmd summon item 8.5 -59.5 10.5 {Item:{id:"golemancy:stone_plate",count:2},Motion:[0.0,0.0,0.0]}
+103 cmd summon item 8.5 -59.5 10.5 {Item:{id:"create:andesite_alloy",count:1},Motion:[0.0,0.0,0.0]}
+110 cmd summon item 18.5 -59.0 10.5 {Item:{id:"golemancy:stone_torso_shell",count:1},Motion:[0.0,0.0,0.0]}
+111 cmd summon item 22.5 -59.0 10.5 {Item:{id:"create:copper_sheet",count:1},Motion:[0.0,0.0,0.0]}
+# Crafters are filled by hand, the way a player does it: right-click each front with one plate.
+115 cmd tp @s 12.5 -60 7.5 0 20
+117 cmd item replace entity @s weapon.mainhand with golemancy:stone_plate 1
+118 use 12 -60 10 north
+119 cmd item replace entity @s weapon.mainhand with golemancy:stone_plate 1
+120 use 13 -60 10 north
+121 cmd item replace entity @s weapon.mainhand with golemancy:stone_plate 1
+122 use 12 -59 10 north
+123 cmd item replace entity @s weapon.mainhand with golemancy:stone_plate 1
+124 use 13 -59 10 north
+# Frame line steps: limb, limb, head, press, core housing.
+# Deployers get their item the way a player gives it: right-click the working (bottom) face.
+130 cmd tp @s 18.5 -60 8.5 0 -40
+131 cmd item replace entity @s weapon.mainhand with golemancy:stone_limb 1
+132 use 18 -58 10 down
+134 cmd tp @s 22.5 -60 8.5 0 -40
+135 cmd item replace entity @s weapon.mainhand with minecraft:amethyst_shard 1
+136 use 22 -58 10 down
+# Spouts filled from buckets by the player.
+# Spouts are normally fed by pipes; here their tanks are filled directly.
+140 cmd data merge block 26 -58 10 {Tanks:[{TankContent:{Fluid:{id:"minecraft:water",amount:1000}}}]}
+150 cmd data merge block 30 -58 10 {Tanks:[{TankContent:{Fluid:{id:"minecraft:lava",amount:1000}}}]}
+160 cmd summon item 26.5 -59.0 10.5 {Item:{id:"golemancy:core_housing",count:1},Motion:[0.0,0.0,0.0]}
+161 cmd summon item 30.5 -59.0 10.5 {Item:{id:"golemancy:core_housing",count:1},Motion:[0.0,0.0,0.0]}
+# Mixers (inputs supplied directly so each step is tested on its own).
+170 cmd summon item 34.5 -58.5 10.5 {Item:{id:"golemancy:molten_core_housing",count:1},Motion:[0.0,0.0,0.0]}
+171 cmd summon item 34.5 -58.5 10.5 {Item:{id:"irons_spellbooks:arcane_essence",count:1},Motion:[0.0,0.0,0.0]}
+172 cmd summon item 34.5 -58.5 10.5 {Item:{id:"minecraft:blaze_powder",count:2},Motion:[0.0,0.0,0.0]}
+173 cmd summon item 38.5 -59.5 10.5 {Item:{id:"golemancy:quenched_core_housing",count:1},Motion:[0.0,0.0,0.0]}
+174 cmd summon item 38.5 -59.5 10.5 {Item:{id:"irons_spellbooks:arcane_essence",count:1},Motion:[0.0,0.0,0.0]}
+175 cmd summon item 38.5 -59.5 10.5 {Item:{id:"minecraft:packed_ice",count:2},Motion:[0.0,0.0,0.0]}
+# Altar: frame and core thrown into the inserting funnel.
+180 cmd summon item 42.5 -58.6 9.5 {Item:{id:"golemancy:frame/stone_guardian",count:1},Motion:[0.0,0.0,0.0]}
+182 cmd summon item 42.5 -58.6 9.5 {Item:{id:"golemancy:core/fire",count:1},Motion:[0.0,0.0,0.0]}
+# More frame-line steps.
+230 cmd tp @s 18.5 -60 8.5 0 -40
+231 cmd item replace entity @s weapon.mainhand with golemancy:stone_limb 1
+232 use 18 -58 10 down
+231 cmd setblock 22 -58 10 create:mechanical_press[facing=north]
+330 cmd tp @s 18.5 -60 8.5 0 -40
+331 cmd item replace entity @s weapon.mainhand with golemancy:stone_head 1
+332 use 18 -58 10 down
+331 cmd setblock 22 -58 10 create:deployer[facing=down,axis_along_first=false]
+340 cmd tp @s 22.5 -60 8.5 0 -40
+341 cmd item replace entity @s weapon.mainhand with irons_spellbooks:arcane_essence 1
+342 use 22 -58 10 down
+430 cmd setblock 18 -58 10 create:mechanical_press[facing=north]
+530 cmd setblock 18 -58 10 create:deployer[facing=down,axis_along_first=false]
+540 cmd tp @s 18.5 -60 8.5 0 -40
+541 cmd item replace entity @s weapon.mainhand with golemancy:core_housing 1
+542 use 18 -58 10 down
+# --- Results ---------------------------------------------------------------------------------------
+660 cmd tp @s 20.5 -55 -4 0 25
+670 gui false
+680 shot nogui_c_factory_overview
+690 gui true
+700 cmd data get block 4 -60 10
+702 cmd data get block 8 -60 10
+704 cmd data get block 18 -60 10
+706 cmd data get block 22 -60 10
+708 cmd data get block 26 -60 10
+710 cmd data get block 30 -60 10
+712 cmd data get block 34 -59 10
+714 cmd data get block 38 -60 10
+716 cmd data get block 42 -59 10
+720 cmd execute as @e[type=item] run data get entity @s Item
+730 quit

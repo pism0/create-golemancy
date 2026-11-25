@@ -1,0 +1,27 @@
+# Diagnostic: the Stone Guardian frame sequence on one depot, state printed after every step.
+20 cmd time set noon
+30 cmd setblock 18 -60 10 create:depot
+31 cmd setblock 17 -58 10 create:creative_motor[facing=east]{ScrollValue:64}
+32 cmd setblock 18 -58 11 create:creative_motor[facing=north]{ScrollValue:64}
+33 cmd setblock 18 -58 10 create:deployer[facing=down,axis_along_first=true]
+60 cmd summon item 18.5 -59.0 10.5 {Item:{id:"golemancy:stone_torso_shell",count:1},Motion:[0.0,0.0,0.0]}
+70 cmd tp @s 18.5 -60 8.5 0 -40
+80 cmd item replace entity @s weapon.mainhand with golemancy:stone_limb 1
+85 use 18 -58 10 down
+160 cmd data get block 18 -60 10 HeldItem.Item
+161 cmd data get block 18 -58 10
+180 cmd item replace entity @s weapon.mainhand with golemancy:stone_limb 1
+185 use 18 -58 10 down
+260 cmd data get block 18 -60 10 HeldItem.Item
+261 cmd data get block 18 -58 10
+280 cmd item replace entity @s weapon.mainhand with golemancy:stone_head 1
+285 use 18 -58 10 down
+360 cmd data get block 18 -60 10 HeldItem.Item
+361 cmd data get block 18 -58 10
+380 cmd setblock 18 -58 10 create:mechanical_press[facing=north]
+460 cmd data get block 18 -60 10 HeldItem.Item
+470 cmd setblock 18 -58 10 create:deployer[facing=down,axis_along_first=true]
+480 cmd item replace entity @s weapon.mainhand with golemancy:core_housing 1
+485 use 18 -58 10 down
+560 cmd data get block 18 -60 10 HeldItem.Item
+570 quit

@@ -298,3 +298,25 @@ Not a bug: an early night screenshot looked unlit because the idle golems had tu
 the camera. The tour script now freezes them facing it (`NoAI`) and hides the HUD.
 
 Screenshots: `art/previews/ingame/`.
+
+## In-game check — PLAYTEST sections C and D (2026-11-25)
+
+Scripted on real Create machines (`tools/smoke/c_factory.txt`, `c_frame_probe.txt`,
+`d_behaviour.txt`); results read back with `/data get`.
+
+| Check | Result |
+| --- | --- |
+| C1 saw, press, compacting, 2x2 mechanical crafters (plates, limb, head) | pass |
+| C2 Stone Guardian frame, full 5-step sequence on deployer/press | pass |
+| C3 core housing line, spout water/lava, heated and cold mixing (Fire, Frost cores) | pass |
+| C4 altar fed by an inserting funnel and emptied by an extracting funnel | pass |
+| C5 whole line with no manual input | not built (each station accepts automation; the altar side is covered by GameTests) |
+| D2 Guardian engages a husk in its radius, casts Firebolt (husk set on fire), returns toward its post | pass |
+| D2 Soldier follows its owner | pass |
+| D2 Soldier attacks what its owner hits | **FAIL**: owner punched a pig, the Soldier reached the owner but never attacked it. Open bug, not yet fixed |
+| D4 / D5 energy, power-down, recharge, pack-up | pass (earlier interactive check) |
+| D6 death drops Remains (integrity 75%, owner and home kept); rebuild at altar with 4 clay + 1 redstone | pass |
+| D7 ownership with a second player | not tested in-game (GameTests cover it) |
+
+Test-method notes: `/data merge` on a Create kinetic block detaches it from its network, so
+deployers are given items by the player's right-click; spout tanks take `{Tanks:[{TankContent:{Fluid:{...}}}]}`.

@@ -1,0 +1,28 @@
+# Diagnostic: one deployer over a depot, both possible shaft axes powered, state printed over time.
+20 cmd time set noon
+30 cmd setblock 18 -60 10 create:depot
+31 cmd setblock 18 -58 11 create:creative_motor[facing=north]{ScrollValue:64}
+32 cmd setblock 18 -58 10 create:deployer[facing=down,axis_along_first=false]
+33 cmd setblock 20 -60 10 create:depot
+34 cmd setblock 19 -58 10 create:creative_motor[facing=east]{ScrollValue:64}
+35 cmd setblock 20 -58 10 create:deployer[facing=down,axis_along_first=true]
+36 cmd setblock 26 -58 10 create:spout
+37 cmd data merge block 26 -58 10 {Tanks:[{TankContent:{Fluid:{id:"minecraft:water",amount:1000}}}]}
+60 cmd summon item 18.5 -59.0 10.5 {Item:{id:"golemancy:stone_torso_shell",count:1},Motion:[0.0,0.0,0.0]}
+61 cmd summon item 20.5 -59.0 10.5 {Item:{id:"golemancy:stone_torso_shell",count:1},Motion:[0.0,0.0,0.0]}
+62 cmd tp @s 18.5 -58 7.5 0 20
+63 cmd item replace entity @s weapon.mainhand with golemancy:stone_limb 1
+64 use 18 -58 10 north
+65 cmd item replace entity @s weapon.mainhand with golemancy:stone_limb 1
+66 use 20 -58 10 north
+70 cmd tp @s 19.5 -58 5 0 15
+120 cmd data get block 18 -58 10
+121 cmd data get block 20 -58 10
+122 cmd data get block 18 -60 10 HeldItem.Item
+123 cmd data get block 20 -60 10 HeldItem.Item
+124 cmd data get block 26 -58 10 Tanks
+130 gui false
+140 shot probe
+200 cmd data get block 18 -60 10 HeldItem.Item
+201 cmd data get block 20 -60 10 HeldItem.Item
+210 quit

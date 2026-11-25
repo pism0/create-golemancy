@@ -118,6 +118,48 @@ public final class DevSmoke {
                             message -> Golemancy.LOGGER.info("[smoke] screenshot {}", step.argument));
                 }
                 case "gui" -> mc.options.hideGui = !Boolean.parseBoolean(step.argument);
+                // "use x y z face": the player's right-click with the held item on that block face,
+                // through the normal client interaction path (as if the player clicked it).
+                case "use" -> {
+                    String[] p = step.argument.split("\\s+");
+                    net.minecraft.core.BlockPos pos = new net.minecraft.core.BlockPos(
+                            Integer.parseInt(p[0]), Integer.parseInt(p[1]), Integer.parseInt(p[2]));
+                    net.minecraft.core.Direction face = net.minecraft.core.Direction.byName(p.length > 3 ? p[3] : "up");
+                    net.minecraft.world.phys.Vec3 hit = net.minecraft.world.phys.Vec3.atCenterOf(pos)
+                            .add(net.minecraft.world.phys.Vec3.atLowerCornerOf(face.getNormal()).scale(0.5));
+                    var result = mc.gameMode.useItemOn(mc.player, net.minecraft.world.InteractionHand.MAIN_HAND,
+                            new net.minecraft.world.phys.BlockHitResult(hit, face, pos, false));
+                    Golemancy.LOGGER.info("[smoke] use {} on {} {} -> {}", mc.player.getMainHandItem(), pos, face, result);
+                }
+                // "useentity <entity selector-free type id>": right-click the nearest entity of that type.
+                case "useentity" -> {
+                    var type = net.minecraft.core.registries.BuiltInRegistries.ENTITY_TYPE
+                            .get(net.minecraft.resources.ResourceLocation.parse(step.argument));
+                    var target = mc.level.getEntitiesOfClass(net.minecraft.world.entity.Entity.class,
+                                    mc.player.getBoundingBox().inflate(8), e -> e.getType() == type)
+                            .stream().min(Comparator.comparingDouble(mc.player::distanceToSqr)).orElse(null);
+                    if (target == null) {
+                        Golemancy.LOGGER.warn("[smoke] useentity: no {} nearby", step.argument);
+                    } else {
+                        var result = mc.gameMode.interact(mc.player, target, net.minecraft.world.InteractionHand.MAIN_HAND);
+                        Golemancy.LOGGER.info("[smoke] useentity {} with {} -> {}", target, mc.player.getMainHandItem(), result);
+                    }
+                }
+                case "sneak" -> mc.player.setShiftKeyDown(Boolean.parseBoolean(step.argument));
+                // "attackentity <entity type id>": the player's left-click on the nearest entity of that type.
+                case "attackentity" -> {
+                    var type = net.minecraft.core.registries.BuiltInRegistries.ENTITY_TYPE
+                            .get(net.minecraft.resources.ResourceLocation.parse(step.argument));
+                    var target = mc.level.getEntitiesOfClass(net.minecraft.world.entity.Entity.class,
+                                    mc.player.getBoundingBox().inflate(6), e -> e.getType() == type)
+                            .stream().min(Comparator.comparingDouble(mc.player::distanceToSqr)).orElse(null);
+                    if (target == null) {
+                        Golemancy.LOGGER.warn("[smoke] attackentity: no {} nearby", step.argument);
+                    } else {
+                        mc.gameMode.attack(mc.player, target);
+                        Golemancy.LOGGER.info("[smoke] attackentity {}", target);
+                    }
+                }
                 case "quit" -> {
                     Golemancy.LOGGER.info("[smoke] DONE");
                     mc.stop();
