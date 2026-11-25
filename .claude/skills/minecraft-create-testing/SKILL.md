@@ -62,7 +62,12 @@ Tips:
 - Use `NoAI:1b` to pin a target in place. Golems need AI, so set NoAI only for screenshot tours.
 - Leave about 200 ticks between sections; the software renderer is slow.
 - Existing scripts: `m1_items`, `m4_tour`, `interactive`, `c_factory`, `c_deployer_probe`,
-  `c_frame_probe`, `d_behaviour` (PLAYTEST D), `d_soldier_probe`.
+  `c_frame_probe`, `c5_handsoff` (full automated line), `d_behaviour` (PLAYTEST D), `d_soldier_probe`.
+- Without Create: Wizardry: `SMOKE_GRADLE_ARGS=-Pwith_wizardry=false tools/run_client_direct.sh …`.
+- Give the client about 8 ticks between `item replace` and a `use`; with 2 ticks it sometimes
+  still used the previous item.
+- An Iron's scroll by command: `irons_spellbooks:scroll` with component
+  `"irons_spellbooks:spell_container":{maxSpells:1,mustEquip:false,improved:false,spellWheel:false,data:[{id:"irons_spellbooks:firebolt",index:0,level:1,locked:true}]}`.
 
 ## Driving the game with computer use
 
@@ -130,7 +135,22 @@ Loading machines:
   `{ConnectedInput:{Controller:1b,Data:[{X:0,Y:-1,Z:0},…]}}`. Members get `Controller:0b` and their
   offset to the controller. A chain of crafters pointing down and right worked.
 - Funnels: `create:andesite_funnel[facing=…,extracting=true]` pulls out of the block behind it.
-  Leave out `extracting` to insert.
+  Leave out `extracting` to insert. A belt hands items only to a funnel facing UP (on top of the
+  inventory, at belt height); a wall funnel at a belt's end ignores the belt.
+
+Belts:
+- Lay them the player's way: two `create:shaft[axis=z]` (for a belt along x), hold
+  `create:belt_connector`, `use` the first shaft, then the second (teleport within ~5 blocks of each).
+- The belt's direction depends on the motor: with a motor `facing=north` beside the start, ScrollValue
+  64 made the belt run east (its Speed reads -64). Check by dumping the controller's `Inventory`
+  (`data get block <start> Inventory`, entries have `Pos` along the belt and `Locked:1b` when a
+  station holds them).
+- A deployer with an empty hand HOLDs every item that reaches it (Create's BeltDeployerCallbacks),
+  so stock deployers with stacks. Sequenced assembly works on a belt with stations in step order.
+- A chute below a chest pulls all matching items as one stack; an item an inventory refuses waits at
+  the belt end and blocks everything behind it.
+- Raise the whole line one block (belt y=-59, stations y=-57) when the end must feed a block that
+  sits on the ground.
 
 Golemancy machines:
 - The Binding Altar needs rotation from below: put a creative motor `facing=up` under it.

@@ -15,7 +15,7 @@ JAVA="$1"
 SCRIPT="$2"
 LIMIT="${3:-900}"
 
-./gradlew writeClientSmokeClasspath -Psmoke="$SCRIPT" --console=plain -q || exit 1
+./gradlew writeClientSmokeClasspath -Psmoke="$SCRIPT" ${SMOKE_GRADLE_ARGS:-} --console=plain -q || exit 1
 
 ROOT_W="$(cygpath -m "$(pwd)")"
 mkdir -p run-smoke

@@ -99,6 +99,11 @@ Use creative for materials if you like; the point is that the machines accept th
 - **C5 Hands-off.** Funnels or a chute feeding frame, core and scroll into the altar; a funnel or
   mechanical arm pulling from it. **Check:** only the finished golem comes out; inputs are never
   pulled back out. A comparator on the altar gives 15 while a golem is waiting.
+  Create tips (not Golemancy bugs): a belt hands items only to a funnel lying on top of the altar
+  (facing up), not to one on its side; a deployer with an empty hand stops everything on the belt,
+  so stock each one with a stack; a chute pulls all matching items from a chest at once, so a
+  second core travels with the first and waits at the funnel until the altar has room.
+  `tools/smoke/c5_handsoff.txt` builds a working line.
 - **With Create: Wizardry:** spout 500 mB of its mana onto a Core Housing → Arcane Core directly.
   Pipe mana into the altar: goggles show "Catalyst" and binding runs twice as fast.
 

@@ -282,7 +282,7 @@ Setup problems found and fixed in the test tooling (not in the mod):
 | B7 Ponder: altar scene and frame-line scene play with captions | pass after fix 2 |
 | B8 JEI: Binding Altar category (bind pages, "cannot hold a spell" note) | pass |
 | Config screen: three tabs, requests round-trip, Pack up | pass after fix 3 |
-| A5 without Create: Wizardry | not repeated in-game (GameTests cover both setups) |
+| A5 without Create: Wizardry | pass: the full section D script (`d_behaviour`) run on a build without Wizardry; Wizardry absent from the log, no Golemancy errors, combat, casting and the altar rebuild all work |
 
 Bugs found and fixed:
 
@@ -310,7 +310,7 @@ Scripted on real Create machines (`tools/smoke/c_factory.txt`, `c_frame_probe.tx
 | C2 Stone Guardian frame, full 5-step sequence on deployer/press | pass |
 | C3 core housing line, spout water/lava, heated and cold mixing (Fire, Frost cores) | pass |
 | C4 altar fed by an inserting funnel and emptied by an extracting funnel | pass |
-| C5 whole line with no manual input | not built (each station accepts automation; the altar side is covered by GameTests) |
+| C5 whole line with no manual input | pass (`c5_handsoff`): chest → chute → belt through limb, limb, head deployers, a press and a housing deployer → funnel on the altar. The Stone Guardian with Firebolt is bound with nobody touching anything; the comparator reads 15 while it waits; the extracting funnel takes only the golem; a spare core stays in the altar; the comparator drops to 0 |
 | D2 Guardian engages a husk in its radius, casts Firebolt (husk set on fire), returns toward its post | pass |
 | D2 Soldier follows its owner | pass |
 | D2 Soldier attacks what its owner hits | pass (after fix): the Soldier picked the pig 4 ticks after the owner's punch, but the 1.9-wide Brute stalled 2.3 blocks short because navigation counted the last node as reached. Melee now closes the gap directly; GameTest `bruteClosesLastGapToTarget` |

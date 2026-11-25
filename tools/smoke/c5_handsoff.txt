@@ -1,0 +1,89 @@
+# PLAYTEST C5, scripted: a hands-off line from a chest to a finished Dormant Golem.
+#   tools/run_client_direct.sh <java> c5_handsoff 1200
+# Layout (along z = 20, items travel east):
+#   chest + chute (x=0) -> belt y=-59, x=0..12, under deployers (limb x=2, limb x=4, head x=6),
+#   a press (x=8) and a deployer (core housing x=10) -> a funnel facing up on top of the Binding
+#   Altar (x=13, y=-60) -> an extracting funnel on its east side, held off by a redstone block until
+#   the comparator has been read.
+# Create facts this relies on (learned the hard way):
+#   - a belt hands items only to a funnel facing UP; a wall funnel at a belt's end does nothing.
+#   - a deployer with an empty hand stops every item passing under it, so stock each with a stack.
+#   - motor ScrollValue 64 on this side makes the belt run east (its Speed reads -64).
+#   - a chute pulls every matching item out of a chest as one stack: two cores in the chest travel
+#     together, and the one the altar cannot take yet blocks whatever is behind it.
+# The chest holds the torso shell, a Fire Core and a Firebolt scroll. Once the golem is bound a spare
+# Fire Core is added; it must wait inside the altar, never pulled out by the extracting funnel.
+20 cmd time set noon
+21 cmd gamerule doMobSpawning false
+22 cmd gamerule doDaylightCycle false
+# --- belt: two shafts joined with the player's own belt connector ----------------------------------
+# (The client needs a few ticks to see a new held item; leave about 8 ticks before each use.)
+30 cmd setblock 0 -59 20 create:shaft[axis=z]
+31 cmd setblock 12 -59 20 create:shaft[axis=z]
+32 cmd tp @s 1.5 -60 17.5 0 30
+34 cmd item replace entity @s weapon.mainhand with create:belt_connector 64
+42 use 0 -59 20 north
+46 cmd tp @s 11.5 -60 17.5 0 30
+54 use 12 -59 20 north
+58 cmd setblock 0 -59 21 create:creative_motor[facing=north]{ScrollValue:64}
+# --- stations above the belt -------------------------------------------------------------------------
+60 cmd setblock 2 -57 20 create:deployer[facing=down,axis_along_first=false]
+60 cmd setblock 2 -57 21 create:creative_motor[facing=north]{ScrollValue:64}
+61 cmd setblock 4 -57 20 create:deployer[facing=down,axis_along_first=false]
+61 cmd setblock 4 -57 21 create:creative_motor[facing=north]{ScrollValue:64}
+62 cmd setblock 6 -57 20 create:deployer[facing=down,axis_along_first=false]
+62 cmd setblock 6 -57 21 create:creative_motor[facing=north]{ScrollValue:64}
+63 cmd setblock 8 -57 20 create:mechanical_press[facing=north]
+63 cmd setblock 8 -57 21 create:creative_motor[facing=north]{ScrollValue:64}
+64 cmd setblock 10 -57 20 create:deployer[facing=down,axis_along_first=false]
+64 cmd setblock 10 -57 21 create:creative_motor[facing=north]{ScrollValue:64}
+# --- altar end ---------------------------------------------------------------------------------------
+66 cmd setblock 13 -61 20 create:creative_motor[facing=up]{ScrollValue:64}
+67 cmd setblock 13 -60 20 golemancy:binding_altar
+68 cmd setblock 13 -59 20 create:andesite_funnel[facing=up]
+69 cmd setblock 14 -60 21 minecraft:redstone_block
+69 cmd setblock 14 -60 20 create:andesite_funnel[facing=east,extracting=true]
+70 cmd setblock 13 -60 19 minecraft:comparator[facing=south]
+# --- deployers are stocked by the player (right-click the working face with a stack) ----------------
+72 cmd tp @s 2.5 -60 17.5 0 -35
+73 cmd item replace entity @s weapon.mainhand with golemancy:stone_limb 4
+81 use 2 -57 20 down
+84 cmd tp @s 4.5 -60 17.5 0 -35
+85 cmd item replace entity @s weapon.mainhand with golemancy:stone_limb 4
+93 use 4 -57 20 down
+96 cmd tp @s 6.5 -60 17.5 0 -35
+97 cmd item replace entity @s weapon.mainhand with golemancy:stone_head 4
+105 use 6 -57 20 down
+108 cmd tp @s 10.5 -60 17.5 0 -35
+109 cmd item replace entity @s weapon.mainhand with golemancy:core_housing 4
+117 use 10 -57 20 down
+120 cmd item replace entity @s weapon.mainhand with minecraft:air
+122 cmd data get block 2 -57 20 HeldItem
+123 cmd data get block 4 -57 20 HeldItem
+124 cmd data get block 6 -57 20 HeldItem
+125 cmd data get block 10 -57 20 HeldItem
+126 cmd data get block 0 -59 20 Speed
+127 cmd data get block 13 -60 20 Speed
+# --- from here on nobody touches anything --------------------------------------------------------------
+130 cmd setblock 0 -58 20 create:chute
+132 cmd setblock 0 -57 20 minecraft:chest{Items:[{Slot:0b,id:"golemancy:stone_torso_shell",count:1},{Slot:1b,id:"golemancy:core/fire",count:1},{Slot:2b,id:"irons_spellbooks:scroll",count:1,components:{"irons_spellbooks:spell_container":{maxSpells:1,mustEquip:false,improved:false,spellWheel:false,data:[{id:"irons_spellbooks:firebolt",index:0,level:1,locked:true}]}}}]}
+136 cmd tp @s 7.5 -55 13.5 0 25
+140 gui false
+200 shot nogui_c5_line_1
+240 cmd data get block 0 -59 20 Inventory
+320 cmd data get block 0 -59 20 Inventory
+321 cmd data get block 13 -60 20
+420 cmd data get block 13 -60 20
+450 cmd item replace block 0 -57 20 container.0 with golemancy:core/fire 1
+# A bound golem waits in the altar while the extracting funnel is held off: the comparator reads 15.
+560 cmd data get block 13 -60 20
+561 cmd data get block 13 -60 19 OutputSignal
+570 shot nogui_c5_waiting
+# Release the extracting funnel: only the golem may come out.
+580 cmd setblock 14 -60 21 minecraft:air
+640 cmd execute as @e[type=item] run data get entity @s Item
+642 cmd data get block 13 -60 20
+644 cmd data get block 13 -60 19 OutputSignal
+646 cmd data get block 0 -59 20 Inventory
+650 shot nogui_c5_done
+690 quit
