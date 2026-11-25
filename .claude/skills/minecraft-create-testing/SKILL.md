@@ -62,12 +62,29 @@ Tips:
 - Use `NoAI:1b` to pin a target in place. Golems need AI, so set NoAI only for screenshot tours.
 - Leave about 200 ticks between sections; the software renderer is slow.
 - Existing scripts: `m1_items`, `m4_tour`, `interactive`, `c_factory`, `c_deployer_probe`,
-  `c_frame_probe`, `c5_handsoff` (full automated line), `d_behaviour` (PLAYTEST D), `d_soldier_probe`.
+  `c_frame_probe`, `c5_handsoff` (full automated line), `d_behaviour` (PLAYTEST D), `d_soldier_probe`,
+  `d_soldier_timeline`, `gui_probe`, `server_check`.
 - Without Create: Wizardry: `SMOKE_GRADLE_ARGS=-Pwith_wizardry=false tools/run_client_direct.sh …`.
 - Give the client about 8 ticks between `item replace` and a `use`; with 2 ticks it sometimes
   still used the previous item.
 - An Iron's scroll by command: `irons_spellbooks:scroll` with component
   `"irons_spellbooks:spell_container":{maxSpells:1,mustEquip:false,improved:false,spellWheel:false,data:[{id:"irons_spellbooks:firebolt",index:0,level:1,locked:true}]}`.
+
+## Dedicated server
+
+- The owner accepted the Minecraft EULA on 2026-11-25 (DECISIONS D-018). The `server` run uses
+  `run-server/` (git-ignored): `eula.txt`, `server.properties` (`online-mode=false`, flat world),
+  `ops.json` opping the offline player `Dev` (UUID 380df991-f603-344c-a090-369bad2a924a).
+- Start it in the background: `./gradlew runServer --console=plain > <scratchpad>/server.log 2>&1 &`,
+  then wait until the log shows `Done (`. Join with
+  `SMOKE_JVM_OPTS=-Dgolemancy.smokeServer=localhost:25565 tools/run_client_direct.sh <java> <script>`.
+  Scripts run as usual (ticks count from joining). Begin with `kill @e[type=!player]`: the world
+  persists between runs. `server_check` (section D), `gui_probe` and `c5_handsoff` all pass there.
+- Stop it by killing the java process whose command line has `serverRunVmArgs` (and its gradlew
+  wrapper). The NeoForge version-check JSON error and the "chat can't be verified" toast are expected
+  offline.
+- The `shot` step logs the open screen (`screen: GolemScreen`); use that, not the image, to check a
+  GUI opened, since a screenshot is the previous frame.
 
 ## Driving the game with computer use
 
@@ -113,7 +130,14 @@ Placement:
   basin.
 - A blaze burner goes under the basin:
   `setblock x y z create:blaze_burner[blaze=kindled]{fuelLevel:1,burnTimeRemaining:100000}`.
-- Power: `create:creative_motor[facing=up]{ScrollValue:64}` sets 64 RPM.
+- Power: `create:creative_motor[facing=up]{ScrollValue:64}` sets 64 RPM. A motor drives only the
+  block in front of its `facing` side.
+  - Deployers `[facing=down,axis_along_first=false]` and presses `[facing=north]` run from a motor
+    one block south of them, `facing=north` (that is what the working scripts use).
+  - A mechanical saw that processes dropped items: `create:mechanical_saw[facing=up,axis_along_first=true]`
+    with a motor beside it on the shaft axis (`facing=east` from the west side).
+  - The sign of `Speed` is the rotation direction, not a fault. -64 is as good as 64; only 0 means
+    unpowered or detached.
   - A mixer does not connect to a motor directly above it. Put a `create:cogwheel` beside the mixer
     and the motor under that cog.
   - Shafts and cogs pass rotation as in survival. Check that the speed is not 0 with
@@ -134,9 +158,25 @@ Loading machines:
 - Crafter grids are linked with ConnectedInput NBT. The controller lists the member offsets:
   `{ConnectedInput:{Controller:1b,Data:[{X:0,Y:-1,Z:0},…]}}`. Members get `Controller:0b` and their
   offset to the controller. A chain of crafters pointing down and right worked.
-- Funnels: `create:andesite_funnel[facing=…,extracting=true]` pulls out of the block behind it.
-  Leave out `extracting` to insert. A belt hands items only to a funnel facing UP (on top of the
-  inventory, at belt height); a wall funnel at a belt's end ignores the belt.
+- Mixers: a heated recipe needs a kindled blaze burner under the basin; an unheated one (the Frost
+  Core: quenched housing + Arcane Essence + 2 packed ice) runs in a plain basin.
+
+Moving items:
+- Dropping items onto a machine is the quickest input: depots, basins, saws and funnels pick up item
+  entities. Summon them still, just above the block:
+  `summon item x.5 y z.5 {Item:{id:"…",count:N},Motion:[0.0,0.0,0.0]}`.
+- Funnels: `facing` points AWAY from the block the funnel is attached to (a funnel on the north face
+  of a block is `facing=north`). `create:andesite_funnel[facing=…,extracting=true]` pulls out of
+  that block; leave out `extracting` to insert into it.
+  - A belt hands items only to a funnel facing UP (lying on top of the inventory, at belt height); a
+    wall funnel at a belt's end ignores the belt (`FunnelBlockEntity.supportsDirectBeltInput`).
+  - An extracting wall funnel with nothing in front drops what it pulls as item entities in front.
+  - A redstone block next to a funnel pauses it; remove the block to release it. Handy for checking
+    what waits in an inventory before letting it out.
+  - An andesite funnel moves one item at a time.
+- Chutes: a chute pulls from the inventory directly above it and drops onto a belt or block below.
+- Comparators: `minecraft:comparator[facing=D]` reads the block on its `D` side (facing=south
+  reads the block to its south). Read it with `data get block … OutputSignal`.
 
 Belts:
 - Lay them the player's way: two `create:shaft[axis=z]` (for a belt along x), hold
@@ -156,7 +196,21 @@ Golemancy machines:
 - The Binding Altar needs rotation from below: put a creative motor `facing=up` under it.
   Right-click with items to load it. Read the result with `data get block … Output`. Allow about
   200 ticks per bind at 64 RPM.
+  - Automation sees slots 0–4 as inputs (any slot; the altar routes each item to the body, core,
+    inscription or supply slot) and slot 5 as the output. Only the output can be extracted.
+  - Binding starts as soon as a frame and a core are in. Any input that arrives later (a scroll)
+    recomputes the plan and restarts the progress, so the scroll is still included.
+  - Comparator: 15 while a finished golem waits, otherwise the progress (0–14).
+  - `data get block …` shows `Status` (7 = binding), `Progress`, `Time` and `Inputs`/`Output`.
 - `tools/smoke/c_factory.txt` builds the full PLAYTEST C station row; copy its layouts.
+  `tools/smoke/c5_handsoff.txt` is a complete chest-to-golem line.
+
+Reading Create's own code when a mechanic is unclear:
+- The slim jar is in the Gradle cache (`find ~/.gradle/caches -name "create-1.21.1-6.0.10-280-slim.jar"`).
+  Unzip the class you need into the scratchpad and run
+  `"/c/Program Files/Java/jdk-21.0.11/bin/javap.exe" -c -p <class>`. Useful classes:
+  `content/logistics/funnel/FunnelBlockEntity`, `content/kinetics/deployer/BeltDeployerCallbacks`,
+  `content/kinetics/belt/...`. One look at the bytecode beat several blind test runs.
 
 ## Docs to keep up to date
 

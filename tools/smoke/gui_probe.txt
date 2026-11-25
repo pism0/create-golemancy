@@ -1,0 +1,14 @@
+# Opens a golem's screen with an empty-hand right-click and reports which screen is showing.
+# Works in singleplayer and, with SMOKE_JVM_OPTS=-Dgolemancy.smokeServer=localhost:25565, on a server.
+16 cmd kill @e[type=!player]
+20 cmd time set noon
+24 cmd gamemode survival
+30 cmd tp @s 60.5 -60 -4.5 0 30
+32 cmd item replace entity @s weapon.mainhand with golemancy:dormant_golem[golemancy:golem_spec={schema:1,frame:"golemancy:guardian",material:"golemancy:stone",core:"golemancy:fire"}]
+40 use 60 -61 0 up
+50 cmd item replace entity @s weapon.mainhand with minecraft:air
+60 cmd tp @s 60.5 -60 -2.5 0 20
+70 useentity golemancy:guardian
+80 shot gui_probe_1
+100 shot gui_probe_2
+110 quit

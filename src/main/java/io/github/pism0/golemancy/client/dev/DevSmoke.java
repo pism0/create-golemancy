@@ -42,6 +42,8 @@ public final class DevSmoke {
 
     private static final String SCRIPT = System.getProperty("golemancy.smoke", "");
     private static final String WORLD = "golemancy_smoke";
+    /** {@code -Dgolemancy.smokeServer=host:port}: join that server instead of creating a world. */
+    private static final String SERVER = System.getProperty("golemancy.smokeServer", "");
 
     private record Step(int tick, String action, String argument) {
     }
@@ -72,6 +74,16 @@ public final class DevSmoke {
         Golemancy.LOGGER.info("[smoke] first screen: {}", mc.screen.getClass().getSimpleName());
         try {
             steps = loadScript(Path.of(SCRIPT));
+            if (!SERVER.isEmpty()) {
+                // Join a running dedicated server instead of making a world (offline mode, as "Dev").
+                Golemancy.LOGGER.info("[smoke] joining server {} and running {} steps", SERVER, steps.size());
+                net.minecraft.client.gui.screens.ConnectScreen.startConnecting(mc.screen, mc,
+                        net.minecraft.client.multiplayer.resolver.ServerAddress.parseString(SERVER),
+                        new net.minecraft.client.multiplayer.ServerData("Golemancy dev server", SERVER,
+                                net.minecraft.client.multiplayer.ServerData.Type.OTHER),
+                        false, null);
+                return;
+            }
             deleteOldWorld(mc.gameDirectory.toPath().resolve("saves").resolve(WORLD));
             Golemancy.LOGGER.info("[smoke] creating world '{}' and running {} steps from {}", WORLD, steps.size(), SCRIPT);
             GameRules rules = new GameRules();
@@ -113,6 +125,8 @@ public final class DevSmoke {
                     mc.player.connection.sendCommand(step.argument);
                 }
                 case "shot" -> {
+                    Golemancy.LOGGER.info("[smoke] shot {} (screen: {})", step.argument,
+                            mc.screen == null ? "none" : mc.screen.getClass().getSimpleName());
                     mc.options.hideGui = step.argument.startsWith("nogui_");
                     Screenshot.grab(mc.gameDirectory, step.argument + ".png", mc.getMainRenderTarget(),
                             message -> Golemancy.LOGGER.info("[smoke] screenshot {}", step.argument));

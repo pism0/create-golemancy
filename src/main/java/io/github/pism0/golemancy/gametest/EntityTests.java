@@ -103,7 +103,9 @@ public final class EntityTests {
         reloaded.tick();
 
         helper.assertTrue(before.equals(reloaded.getSpec()), "spec changed across save/load:\n" + before + "\n" + reloaded.getSpec());
-        assertClose(helper, reloaded.getEnergy().getEnergy(), 321.0, "energy");
+        // The tick above may land on the golem's energy drain, so allow one tick's worth (under 1).
+        double energy = reloaded.getEnergy().getEnergy();
+        helper.assertTrue(energy <= 321.0 + 1e-3 && energy > 320.0, "energy: expected 321 (less one tick's drain), got " + energy);
         assertClose(helper, reloaded.getHealth(), 55.0, "health");
         // Stone guardian: 72 health. Derived values are recalculated, not loaded.
         assertClose(helper, reloaded.getMaxHealth(), 72.0, "max health after load");

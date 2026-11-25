@@ -1,0 +1,65 @@
+# Diagnostic for PLAYTEST D2: pig health and Soldier position every 10 ticks after the owner's punch.
+#   tools/run_client_direct.sh <java> d_soldier_timeline 600   (add the smokeServer flag for a server)
+16 cmd kill @e[type=!player]
+20 cmd time set noon
+21 cmd gamerule doMobSpawning false
+24 cmd gamemode survival
+25 cmd effect give @s minecraft:resistance infinite 4 true
+30 cmd tp @s 20.5 -60 -4.5 0 30
+32 cmd item replace entity @s weapon.mainhand with golemancy:dormant_golem[golemancy:golem_spec={schema:1,frame:"golemancy:brute",material:"golemancy:clay",core:"golemancy:frost",behavior:{profile:"soldier",move_mode:"follow"}}]
+38 use 20 -61 0 up
+40 cmd tp @s 20.5 -60 -14.5 0 0
+140 cmd summon minecraft:pig 21.5 -60 -16.5 {NoAI:1b}
+150 cmd item replace entity @s weapon.mainhand with minecraft:air
+170 attackentity minecraft:pig
+180 cmd data get entity @e[type=pig,limit=1] Health
+181 cmd data get entity @e[type=golemancy:brute,limit=1] Pos
+190 cmd data get entity @e[type=pig,limit=1] Health
+191 cmd data get entity @e[type=golemancy:brute,limit=1] Pos
+200 cmd data get entity @e[type=pig,limit=1] Health
+201 cmd data get entity @e[type=golemancy:brute,limit=1] Pos
+210 cmd data get entity @e[type=pig,limit=1] Health
+211 cmd data get entity @e[type=golemancy:brute,limit=1] Pos
+220 cmd data get entity @e[type=pig,limit=1] Health
+221 cmd data get entity @e[type=golemancy:brute,limit=1] Pos
+230 cmd data get entity @e[type=pig,limit=1] Health
+231 cmd data get entity @e[type=golemancy:brute,limit=1] Pos
+240 cmd data get entity @e[type=pig,limit=1] Health
+241 cmd data get entity @e[type=golemancy:brute,limit=1] Pos
+250 cmd data get entity @e[type=pig,limit=1] Health
+251 cmd data get entity @e[type=golemancy:brute,limit=1] Pos
+260 cmd data get entity @e[type=pig,limit=1] Health
+261 cmd data get entity @e[type=golemancy:brute,limit=1] Pos
+270 cmd data get entity @e[type=pig,limit=1] Health
+271 cmd data get entity @e[type=golemancy:brute,limit=1] Pos
+280 cmd data get entity @e[type=pig,limit=1] Health
+281 cmd data get entity @e[type=golemancy:brute,limit=1] Pos
+290 cmd data get entity @e[type=pig,limit=1] Health
+291 cmd data get entity @e[type=golemancy:brute,limit=1] Pos
+300 cmd data get entity @e[type=pig,limit=1] Health
+301 cmd data get entity @e[type=golemancy:brute,limit=1] Pos
+310 cmd data get entity @e[type=pig,limit=1] Health
+311 cmd data get entity @e[type=golemancy:brute,limit=1] Pos
+320 cmd data get entity @e[type=pig,limit=1] Health
+321 cmd data get entity @e[type=golemancy:brute,limit=1] Pos
+330 cmd data get entity @e[type=pig,limit=1] Health
+331 cmd data get entity @e[type=golemancy:brute,limit=1] Pos
+340 cmd data get entity @e[type=pig,limit=1] Health
+341 cmd data get entity @e[type=golemancy:brute,limit=1] Pos
+350 cmd data get entity @e[type=pig,limit=1] Health
+351 cmd data get entity @e[type=golemancy:brute,limit=1] Pos
+360 cmd data get entity @e[type=pig,limit=1] Health
+361 cmd data get entity @e[type=golemancy:brute,limit=1] Pos
+370 cmd data get entity @e[type=pig,limit=1] Health
+371 cmd data get entity @e[type=golemancy:brute,limit=1] Pos
+380 cmd data get entity @e[type=pig,limit=1] Health
+381 cmd data get entity @e[type=golemancy:brute,limit=1] Pos
+390 cmd data get entity @e[type=pig,limit=1] Health
+391 cmd data get entity @e[type=golemancy:brute,limit=1] Pos
+400 cmd data get entity @e[type=pig,limit=1] Health
+401 cmd data get entity @e[type=golemancy:brute,limit=1] Pos
+410 cmd data get entity @e[type=pig,limit=1] Health
+411 cmd data get entity @e[type=golemancy:brute,limit=1] Pos
+420 cmd data get entity @e[type=pig,limit=1] Health
+421 cmd data get entity @e[type=golemancy:brute,limit=1] Pos
+430 quit

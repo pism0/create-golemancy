@@ -54,6 +54,8 @@ neoForge {
 
         server {
             server()
+            // Its own folder: run/ holds the GameTest server's world.
+            gameDirectory = project.file('run-server')
             programArgument '--nogui'
             systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
         }

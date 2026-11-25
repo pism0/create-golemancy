@@ -318,5 +318,22 @@ Scripted on real Create machines (`tools/smoke/c_factory.txt`, `c_frame_probe.tx
 | D6 death drops Remains (integrity 75%, owner and home kept); rebuild at altar with 4 clay + 1 redstone | pass |
 | D7 ownership with a second player | not tested in-game (GameTests cover it) |
 
+## In-game check — dedicated server (2026-11-25)
+
+`./gradlew runServer` (EULA accepted with the owner's approval, see D-018) in offline mode, in its
+own folder `run-server/`. The dev client joined it with
+`SMOKE_JVM_OPTS=-Dgolemancy.smokeServer=localhost:25565 tools/run_client_direct.sh <java> <script>`.
+
+| Check | Result |
+|---|---|
+| Server starts with every mod, no Golemancy errors | pass (only NeoForge's online version check fails, as offline) |
+| Client joins; no payload or sync errors on either side | pass |
+| Section D on the server (`server_check`): guardian deploy, Firebolt kill, return home; Soldier follows and kills the pig its owner hit; death, Remains, altar rebuild | pass |
+| Golem screen opens with server data (`gui_probe`: frame, material, owner, health) | pass |
+| Hands-off line on the server (`c5_handsoff`): Firebolt Guardian bound, comparator 15 then 0, only the golem extracted | pass |
+
+Note: a Brute walks about 1.5 blocks/s and follows its owner at up to 5 blocks, so assisting the
+owner can take 5 s or more; a script check 268 ticks after the punch was once too early.
+
 Test-method notes: `/data merge` on a Create kinetic block detaches it from its network, so
 deployers are given items by the player's right-click; spout tanks take `{Tanks:[{TankContent:{Fluid:{...}}}]}`.

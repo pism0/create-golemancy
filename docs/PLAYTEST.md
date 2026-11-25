@@ -131,6 +131,15 @@ Use creative for materials if you like; the point is that the machines accept th
 - **D7 Ownership (needs a second player or `/op`).** Another player cannot open the screen, pack
   up, or redeploy your golem ("This golem is not yours"); they can feed it fuel.
 
+## E. Dedicated server (optional, 10 minutes)
+
+1. `./gradlew runServer` (accept the EULA in `run-server/eula.txt` first; set `online-mode=false`
+   in `run-server/server.properties` to join from the dev client). **Check:** the server log has no
+   error mentioning golemancy.
+2. Join it from the client (Multiplayer → Direct Connection → `localhost`). Deploy a golem, open
+   its screen, fight, bind one at an altar. **Check:** everything behaves as in singleplayer and
+   neither log shows a payload or sync error.
+
 ## Useful commands
 
 ```

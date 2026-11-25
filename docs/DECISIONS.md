@@ -198,3 +198,11 @@ spell *to* evocation is read as its built-in school.
 - **Work areas, linked inventories, `IGolemWorkArea`, `IGolemInventoryAccess`:** Milestone 6 in the
   SDD; not created as empty interfaces.
 - **Custom sounds:** none; vanilla sound events only, as instructed.
+
+## D-018 Minecraft EULA accepted for the dedicated-server test
+
+The kickoff limited runs to `runClient` and `runGameTestServer` because `runServer` needs the
+Minecraft EULA accepted. On 2026-11-25 the owner approved accepting it to test a dedicated server.
+`eula=true` lives only in `run-server/eula.txt` (git-ignored); the `server` run now uses that folder so
+it never shares a world with the GameTest server in `run/`. The server runs in offline mode so the
+dev client can join without an account.
