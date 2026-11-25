@@ -1,0 +1,22 @@
+# Client smoke script: sets up a test area and then stays open for manual or computer-use testing.
+#   tools/run_client_direct.sh <java> interactive 3600
+20 cmd time set noon
+21 cmd gamerule doMobSpawning false
+22 cmd tp @s 0.5 -60 -7.5 0 5
+30 cmd summon golemancy:guardian -4.5 -60 0.5 {GolemSpec:{schema:1,frame:"golemancy:guardian",material:"golemancy:stone",core:"golemancy:fire"},Rotation:[180f,0f]}
+31 cmd summon golemancy:brute 5.5 -60 0.5 {GolemSpec:{schema:1,frame:"golemancy:brute",material:"golemancy:clay",core:"golemancy:frost"},Rotation:[180f,0f]}
+# A powered altar: creative motor pointing up with the altar on top.
+34 cmd setblock 0 -60 -2 create:creative_motor[facing=up]{ScrollValue:64}
+35 cmd setblock 0 -59 -2 golemancy:binding_altar
+40 cmd clear @s
+41 cmd item replace entity @s hotbar.0 with golemancy:control_wand
+42 cmd item replace entity @s hotbar.1 with golemancy:dormant_golem[golemancy:golem_spec={schema:1,frame:"golemancy:guardian",material:"golemancy:clay",core:"golemancy:fire"}]
+43 cmd item replace entity @s hotbar.2 with golemancy:frame/stone_guardian 4
+44 cmd item replace entity @s hotbar.3 with golemancy:core/fire 4
+45 cmd item replace entity @s hotbar.4 with golemancy:core/frost 4
+46 cmd item replace entity @s hotbar.5 with golemancy:construct_remains[golemancy:golem_spec={schema:1,frame:"golemancy:brute",material:"golemancy:clay",core:"golemancy:fire",core_integrity:0.5f}]
+47 cmd item replace entity @s hotbar.6 with minecraft:clay_ball 16
+48 cmd item replace entity @s hotbar.7 with minecraft:redstone 16
+49 cmd item replace entity @s hotbar.8 with create:goggles
+60 cmd tp @s 0.5 -59 -4.5 0 5
+# No quit: the game stays open.

@@ -16,7 +16,6 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
-import net.neoforged.neoforge.client.event.ScreenEvent;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -49,6 +48,7 @@ public final class DevSmoke {
 
     private static List<Step> steps;
     private static boolean worldRequested;
+    private static boolean announced;
     private static int ticksInWorld;
     private static int nextStep;
 
@@ -56,44 +56,50 @@ public final class DevSmoke {
         return !SCRIPT.isEmpty();
     }
 
-    @SubscribeEvent
-    public static void onScreenOpening(ScreenEvent.Opening event) {
-        if (!enabled() || worldRequested) return;
-        // A fresh game directory shows the accessibility onboarding screen before the title screen.
-        boolean firstScreen = event.getNewScreen() instanceof TitleScreen
-                || event.getNewScreen() instanceof net.minecraft.client.gui.screens.AccessibilityOnboardingScreen;
-        if (!firstScreen) return;
+    /**
+     * Starts the scripted world once the game is sitting on its first menu. Polled from the client
+     * tick rather than hooked on ScreenEvent.Opening: the initial screens are set while resources
+     * are still loading, and relying on that event proved unreliable.
+     */
+    private static void maybeStartWorld(Minecraft mc) {
+        if (worldRequested) return;
+        boolean firstScreen = mc.screen instanceof TitleScreen
+                || mc.screen instanceof net.minecraft.client.gui.screens.AccessibilityOnboardingScreen;
+        if (!firstScreen || mc.getOverlay() != null) return;
         worldRequested = true;
-        Minecraft mc = Minecraft.getInstance();
         mc.options.pauseOnLostFocus = false;
         mc.options.onboardAccessibility = false;
-        Golemancy.LOGGER.info("[smoke] first screen: {}", event.getNewScreen().getClass().getSimpleName());
-        mc.execute(() -> {
-            try {
-                steps = loadScript(Path.of(SCRIPT));
-                deleteOldWorld(mc.gameDirectory.toPath().resolve("saves").resolve(WORLD));
-                Golemancy.LOGGER.info("[smoke] creating world '{}' and running {} steps from {}", WORLD, steps.size(), SCRIPT);
-                GameRules rules = new GameRules();
-                rules.getRule(GameRules.RULE_DOMOBSPAWNING).set(false, null);
-                rules.getRule(GameRules.RULE_DAYLIGHT).set(false, null);
-                rules.getRule(GameRules.RULE_WEATHER_CYCLE).set(false, null);
-                LevelSettings settings = new LevelSettings(WORLD, GameType.CREATIVE, false, Difficulty.NORMAL, true,
-                        rules, WorldDataConfiguration.DEFAULT);
-                mc.createWorldOpenFlows().createFreshLevel(WORLD, settings, new WorldOptions(20261115L, false, false),
-                        access -> access.registryOrThrow(Registries.WORLD_PRESET)
-                                .getHolderOrThrow(WorldPresets.FLAT).value().createWorldDimensions(),
-                        event.getNewScreen());
-            } catch (Exception e) {
-                Golemancy.LOGGER.error("[smoke] FAILED to start", e);
-                mc.stop();
-            }
-        });
+        Golemancy.LOGGER.info("[smoke] first screen: {}", mc.screen.getClass().getSimpleName());
+        try {
+            steps = loadScript(Path.of(SCRIPT));
+            deleteOldWorld(mc.gameDirectory.toPath().resolve("saves").resolve(WORLD));
+            Golemancy.LOGGER.info("[smoke] creating world '{}' and running {} steps from {}", WORLD, steps.size(), SCRIPT);
+            GameRules rules = new GameRules();
+            rules.getRule(GameRules.RULE_DOMOBSPAWNING).set(false, null);
+            rules.getRule(GameRules.RULE_DAYLIGHT).set(false, null);
+            rules.getRule(GameRules.RULE_WEATHER_CYCLE).set(false, null);
+            LevelSettings settings = new LevelSettings(WORLD, GameType.CREATIVE, false, Difficulty.NORMAL, true,
+                    rules, WorldDataConfiguration.DEFAULT);
+            mc.createWorldOpenFlows().createFreshLevel(WORLD, settings, new WorldOptions(20261115L, false, false),
+                    access -> access.registryOrThrow(Registries.WORLD_PRESET)
+                            .getHolderOrThrow(WorldPresets.FLAT).value().createWorldDimensions(),
+                    mc.screen);
+        } catch (Exception e) {
+            Golemancy.LOGGER.error("[smoke] FAILED to start", e);
+            mc.stop();
+        }
     }
 
     @SubscribeEvent
     public static void onClientTick(ClientTickEvent.Post event) {
-        if (!enabled() || steps == null) return;
+        if (!enabled()) return;
         Minecraft mc = Minecraft.getInstance();
+        if (!announced) {
+            announced = true;
+            Golemancy.LOGGER.info("[smoke] active, script {}", SCRIPT);
+        }
+        maybeStartWorld(mc);
+        if (steps == null) return;
         if (mc.level == null || mc.player == null || mc.player.connection == null) return;
         if (ticksInWorld == 0) {
             Golemancy.LOGGER.info("[smoke] in world");

@@ -31,7 +31,11 @@ public class BindingAltarRenderer extends KineticBlockEntityRenderer<BindingAlta
     @Override
     protected void renderSafe(BindingAltarBlockEntity altar, float partialTicks, PoseStack ms, MultiBufferSource buffer,
                               int light, int overlay) {
-        renderItems(altar, partialTicks, ms, buffer, light, overlay);
+        // The items sit in the air above the altar; the light passed in is the altar's own (inside a
+        // full block, so near zero), which drew everything almost black. Use the light above it.
+        int itemLight = altar.getLevel() == null ? light
+                : net.minecraft.client.renderer.LevelRenderer.getLightColor(altar.getLevel(), altar.getBlockPos().above());
+        renderItems(altar, partialTicks, ms, buffer, itemLight, overlay);
         // Returns early when Flywheel visualisation is active; the visual draws the shaft then.
         super.renderSafe(altar, partialTicks, ms, buffer, light, overlay);
     }

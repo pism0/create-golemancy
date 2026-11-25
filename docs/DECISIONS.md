@@ -128,10 +128,13 @@ school-neutral spell still needs a Fire or Frost core.
 
 ## D-012 No OpenGL on the build machine
 
-The build VM has no GPU or OpenGL driver, so the client cannot be launched there (details in
-PROGRESS.md, M1). A software renderer (Mesa llvmpipe for Windows) would make in-game checks and
-screenshots possible, but it is a third-party binary download, so it was not installed without the
-owner's approval. `./gradlew runClientSmoke -Psmoke=<script>` is ready for a machine with a GPU.
+The build VM has no GPU or OpenGL driver, so the client could not be launched there (details in
+PROGRESS.md, M1). With the owner's approval (2026-11-25) Mesa llvmpipe (mesa-dist-win 26.2.6,
+MinGW x64 release, SHA-256 checked) was installed user-level: its `opengl32.dll` and
+`libgallium_wgl.dll` sit in a private JDK copy at `%LOCALAPPDATA%\Programs\jdk-21-mesa\bin`, so
+nothing system-wide changed. Gradle will not run its client task with a JDK other than its
+toolchain's, so `tools/run_client_direct.sh <java> <script>` launches the Gradle-prepared client
+directly. On a machine with a GPU, `./gradlew runClient` / `runClientSmoke` are all that is needed.
 
 ## D-013 The Binding Altar has no container screen
 

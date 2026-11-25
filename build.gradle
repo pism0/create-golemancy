@@ -164,7 +164,19 @@ tasks.register('writeClientSmokeClasspath') {
         def cp = files
                 .collect { it.absolutePath.replace(File.separator, '/') }
                 .join(File.pathSeparator)
-        out.get().asFile.text = '-cp\n"' + cp + '"\n'
+        // Everything the real run task adds on top of the argument files: the mod-folder mapping
+        // (which tells FML which class and resource folders form the golemancy mod), and any
+        // extra JVM arguments.
+        def extra = new StringBuilder()
+        run.allJvmArgs.findAll { !it.startsWith('@') }.each { extra.append('"').append(it.replace('\\', '/')).append('"\n') }
+        run.environment.each { k, v ->
+            if (k == 'MOD_CLASSES' || k.startsWith('FML') || k.startsWith('NEO')) {
+                extra.append('"-D').append(k).append('=').append(v.toString().replace('\\', '/')).append('"\n')
+            }
+        }
+        out.get().asFile.text = '-cp\n"' + cp + '"\n' + extra
+        println "run jvm args: " + run.allJvmArgs.findAll { !it.startsWith('@') }
+        println "run env keys: " + run.environment.keySet().findAll { !System.getenv().containsKey(it) }
     }
 }
 

@@ -31,7 +31,7 @@ final class ModContentLang {
         lang.add("golemancy.tooltip.energy_full", "Energy: full");
         lang.add("golemancy.tooltip.health", "Health: %s%%");
         lang.add("golemancy.tooltip.owned", "Bound to an owner");
-        lang.add("golemancy.tooltip.unowned", "Unbound: the first player to deploy it becomes its owner");
+        lang.add("golemancy.tooltip.unowned", "Unbound: claimed by whoever deploys it");
         lang.add("golemancy.tooltip.dormant_hint", "Use on a block to deploy");
         lang.add("golemancy.tooltip.remains_hint", "Rebuild at a Binding Altar with repair material and fuel");
         lang.add("golemancy.tooltip.remains_shattered_hint", "Core shattered: rebuild at a Binding Altar with a new core");

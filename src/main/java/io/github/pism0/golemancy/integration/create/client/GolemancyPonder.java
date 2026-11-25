@@ -42,6 +42,16 @@ public final class GolemancyPonder implements PonderPlugin {
         PonderIndex.addPlugin(new GolemancyPonder());
     }
 
+    /**
+     * Exports every scene title and caption into the lang file during datagen. Ponder only shows
+     * translation keys at runtime, so without this the scenes display raw keys. Client setup does
+     * not run during datagen, hence the plugin is registered here as well (as Create does).
+     */
+    public static void provideLang(java.util.function.BiConsumer<String, String> consumer) {
+        PonderIndex.addPlugin(new GolemancyPonder());
+        PonderIndex.getLangAccess().provideLang(Golemancy.MOD_ID, consumer);
+    }
+
     @Override
     public String getModId() {
         return Golemancy.MOD_ID;

@@ -21,9 +21,12 @@ ROOT_W="$(cygpath -m "$(pwd)")"
 mkdir -p run-smoke
 cd run-smoke || exit 1
 # Software rendering is slow: skip the first-launch onboarding screen and turn off the expensive
-# effects (menu blur, fancy graphics, clouds, long render distance). Written once; edit freely.
+# effects (menu blur, fancy graphics, clouds, long render distance). Use and attack are bound to
+# J and K, so automated input can act in the world without moving the captured mouse.
+# Written once; edit freely.
 if [ ! -f options.txt ]; then
     cat > options.txt <<'OPTIONS'
+version:3955
 onboardAccessibility:false
 menuBackgroundBlurriness:0
 graphicsMode:0
@@ -42,6 +45,8 @@ tutorialStep:none
 skipMultiplayerWarning:true
 joinedFirstServer:true
 pauseOnLostFocus:false
+key_key.use:key.keyboard.j
+key_key.attack:key.keyboard.k
 OPTIONS
 fi
 # llvmpipe: use all cores; ask for a 4.5 core context like a real driver would give.

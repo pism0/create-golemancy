@@ -1,14 +1,15 @@
 # Client smoke script: <tick> <action> <argument>
 # v0.1 tour: both frames in both materials with each core, the altar, and the items.
-# Run on a machine with a GPU:   ./gradlew runClientSmoke -Psmoke=m4_tour
+# Golems are summoned with NoAI so they keep facing the camera; shots hide the HUD and chat.
+# Run: ./gradlew runClientSmoke -Psmoke=m4_tour   (or tools/run_client_direct.sh <java> m4_tour on a GPU-less machine)
 # Screenshots land in run-smoke/screenshots/.
 20 cmd time set noon
 21 cmd gamerule doMobSpawning false
 22 cmd tp @s 0.5 -60 -6.5 0 5
-30 cmd summon golemancy:guardian -4.5 -60 0.5 {GolemSpec:{schema:1,frame:"golemancy:guardian",material:"golemancy:stone",core:"golemancy:fire"},Rotation:[180f,0f]}
-31 cmd summon golemancy:guardian -1.5 -60 0.5 {GolemSpec:{schema:1,frame:"golemancy:guardian",material:"golemancy:clay",core:"golemancy:frost"},Rotation:[180f,0f]}
-32 cmd summon golemancy:brute 2.5 -60 0.5 {GolemSpec:{schema:1,frame:"golemancy:brute",material:"golemancy:stone",core:"golemancy:arcane"},Rotation:[180f,0f]}
-33 cmd summon golemancy:brute 6.5 -60 0.5 {GolemSpec:{schema:1,frame:"golemancy:brute",material:"golemancy:clay",core:"golemancy:fire"},Rotation:[180f,0f]}
+30 cmd summon golemancy:guardian -4.5 -60 0.5 {GolemSpec:{schema:1,frame:"golemancy:guardian",material:"golemancy:stone",core:"golemancy:fire"},Rotation:[180f,0f],NoAI:1b}
+31 cmd summon golemancy:guardian -1.5 -60 0.5 {GolemSpec:{schema:1,frame:"golemancy:guardian",material:"golemancy:clay",core:"golemancy:frost"},Rotation:[180f,0f],NoAI:1b}
+32 cmd summon golemancy:brute 2.5 -60 0.5 {GolemSpec:{schema:1,frame:"golemancy:brute",material:"golemancy:stone",core:"golemancy:arcane"},Rotation:[180f,0f],NoAI:1b}
+33 cmd summon golemancy:brute 6.5 -60 0.5 {GolemSpec:{schema:1,frame:"golemancy:brute",material:"golemancy:clay",core:"golemancy:fire"},Rotation:[180f,0f],NoAI:1b}
 34 cmd setblock 0 -60 -3 golemancy:binding_altar
 35 cmd setblock 2 -60 -3 golemancy:binding_altar[working=true]
 40 cmd item replace entity @s hotbar.0 with golemancy:control_wand
@@ -20,19 +21,20 @@
 46 cmd item replace entity @s hotbar.6 with golemancy:core/frost
 47 cmd item replace entity @s hotbar.7 with golemancy:frame/stone_guardian
 48 cmd item replace entity @s hotbar.8 with golemancy:binding_altar
-120 shot tour_lineup
+110 gui false
+120 shot nogui_tour_lineup
 125 cmd tp @s -4.5 -60 -3.5 0 0
-160 shot tour_stone_guardian
-165 cmd tp @s 6.5 -60 -3.5 0 0
-200 shot tour_clay_brute
+160 shot nogui_tour_stone_guardian
+165 cmd tp @s 6.5 -59 -6.5 0 12
+200 shot nogui_tour_clay_brute
 205 cmd tp @s 1 -59 -5.5 0 30
-240 shot tour_altars
+240 shot nogui_tour_altars
 # Powered down: drain one golem and look at the slumped pose.
 245 cmd data merge entity @e[type=golemancy:guardian,limit=1,sort=nearest] {GolemEnergy:0f}
 250 cmd tp @s -4.5 -60 -3.5 0 0
-330 shot tour_powered_down
+330 shot nogui_tour_powered_down
 # Night shot for the emissive core and eyes.
 335 cmd time set midnight
 340 cmd tp @s 0.5 -60 -6.5 0 5
-400 shot tour_glow_night
+400 shot nogui_tour_glow_night
 410 quit

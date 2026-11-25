@@ -1,9 +1,10 @@
 # Playtest guide (v0.1 release candidate)
 
-Everything server-side is covered by GameTests (`./gradlew runGameTestServer`, 36 tests). What is
-listed here needs eyes, because the build machine has no OpenGL and the client has never been
-started (see `docs/PROGRESS.md`, M1). **Sections A and B are first-launch checks: if anything is
-wrong there, stop and send me the log.**
+Everything server-side is covered by GameTests (`./gradlew runGameTestServer`, 36 tests).
+Sections A and B were checked in-game on 2026-11-25 under software rendering (results and the bugs
+fixed: `docs/PROGRESS.md`, "In-game check"); they are still worth a quick look on real hardware.
+Sections C and D have not been played yet. **If anything in A or B is wrong on your machine, stop
+and send me the log.**
 
 Run from the project folder:
 

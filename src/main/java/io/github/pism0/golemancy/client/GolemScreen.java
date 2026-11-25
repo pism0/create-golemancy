@@ -113,7 +113,7 @@ public final class GolemScreen extends Screen {
         behaviourButtons.add(addRenderableWidget(Button.builder(Component.translatable("golemancy.screen.set_home"),
                 b -> send(GolemRequests.Action.SET_HOME_HERE, 0))
                 .bounds(x + w / 2 + 2, y, w / 2 - 2, 18).build()));
-        y += 33;
+        y += 30;
         behaviourButtons.add(addRenderableWidget(Button.builder(Component.translatable("golemancy.screen.pack_up"),
                 b -> {
                     send(GolemRequests.Action.PACK_UP, 0);
@@ -243,9 +243,9 @@ public final class GolemScreen extends Screen {
                 Component home = behavior.home()
                         .<Component>map(pos -> Component.translatable("golemancy.screen.home", pos.getX(), pos.getY(), pos.getZ()))
                         .orElse(Component.translatable("golemancy.screen.home.none"));
-                graphics.drawString(font, home, x, top + 28 + 84 + 3, TEXT_DIM, false);
+                graphics.drawString(font, home, x, top + 28 + 84 - 1, TEXT_DIM, false);
                 Component hint = Component.translatable("golemancy.profile." + behavior.profile().getSerializedName() + ".desc");
-                graphics.drawWordWrap(font, hint, x, top + PANEL_H - 22, PANEL_W - 24, TEXT_DIM);
+                graphics.drawWordWrap(font, hint, x, top + 141, PANEL_W - 24, TEXT_DIM);
             }
         }
     }

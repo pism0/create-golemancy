@@ -54,12 +54,13 @@ public final class ModLangProvider extends LanguageProvider {
         }
         add("golemancy.profile.guardian", "Guardian");
         add("golemancy.profile.soldier", "Soldier");
-        add("golemancy.profile.guardian.desc", "Holds its home position and engages hostiles inside the radius.");
-        add("golemancy.profile.soldier.desc", "Follows its owner and attacks hostiles.");
+        add("golemancy.profile.guardian.desc", "Holds its home and fights hostiles nearby.");
+        add("golemancy.profile.soldier.desc", "Follows its owner and fights hostiles.");
         add("golemancy.move_mode.stay", "Stay");
         add("golemancy.move_mode.follow", "Follow");
 
         ModContentLang.add(this);
+        io.github.pism0.golemancy.integration.create.client.GolemancyPonder.provideLang(this::add);
     }
 
     static String title(String id) {
