@@ -313,7 +313,7 @@ Scripted on real Create machines (`tools/smoke/c_factory.txt`, `c_frame_probe.tx
 | C5 whole line with no manual input | not built (each station accepts automation; the altar side is covered by GameTests) |
 | D2 Guardian engages a husk in its radius, casts Firebolt (husk set on fire), returns toward its post | pass |
 | D2 Soldier follows its owner | pass |
-| D2 Soldier attacks what its owner hits | **FAIL**: owner punched a pig, the Soldier reached the owner but never attacked it. Open bug, not yet fixed |
+| D2 Soldier attacks what its owner hits | pass (after fix): the Soldier picked the pig 4 ticks after the owner's punch, but the 1.9-wide Brute stalled 2.3 blocks short because navigation counted the last node as reached. Melee now closes the gap directly; GameTest `bruteClosesLastGapToTarget` |
 | D4 / D5 energy, power-down, recharge, pack-up | pass (earlier interactive check) |
 | D6 death drops Remains (integrity 75%, owner and home kept); rebuild at altar with 4 clay + 1 redstone | pass |
 | D7 ownership with a second player | not tested in-game (GameTests cover it) |

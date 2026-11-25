@@ -53,6 +53,6 @@ fi
 export GALLIUM_DRIVER=llvmpipe
 export LP_NUM_THREADS="${LP_NUM_THREADS:-8}"
 timeout "$LIMIT" "$JAVA" "@$ROOT_W/build/moddev/clientSmokeRunVmArgs.txt" \
-    -Dgolemancy.smoke="$ROOT_W/tools/smoke/$SCRIPT.txt" \
+    ${SMOKE_JVM_OPTS:-} -Dgolemancy.smoke="$ROOT_W/tools/smoke/$SCRIPT.txt" \
     "@$ROOT_W/build/moddev/clientSmokeClasspathArg.txt" net.neoforged.devlaunch.Main \
     "@$ROOT_W/build/moddev/clientSmokeRunProgramArgs.txt"

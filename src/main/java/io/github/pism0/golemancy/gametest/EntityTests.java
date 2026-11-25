@@ -155,6 +155,38 @@ public final class EntityTests {
         });
     }
 
+    /**
+     * The Brute is wider (1.9) than vanilla melee reach is tuned for. Against a target that stays
+     * put it must still close in and land hits, not stop just out of reach.
+     */
+    @GameTest(template = ARENA, timeoutTicks = 300)
+    public static void bruteReachesAndHitsStationaryTarget(GameTestHelper helper) {
+        ConstructEntity golem = GolemTestUtil.deploy(helper, GolemTestUtil.spec("brute", "clay", "arcane"), 3, 7);
+        Husk husk = helper.spawn(EntityType.HUSK, 11, 2, 7);
+        husk.setNoAi(true);
+        husk.setPersistenceRequired();
+        golem.setTarget(husk);
+        helper.succeedWhen(() -> helper.assertTrue(husk.getLastHurtByMob() == golem || !husk.isAlive(),
+                "the brute has not hit the stationary husk (distance " + String.format("%.2f", golem.distanceTo(husk)) + ")"));
+    }
+
+    /**
+     * A wide golem that walks up to a target ends its path a little outside melee reach (the
+     * navigation counts the last node as reached). It must close the remaining gap and hit. The
+     * positions are the ones a Brute stalled at in game, 2.3 blocks from a pig.
+     */
+    @GameTest(template = ARENA, timeoutTicks = 200)
+    public static void bruteClosesLastGapToTarget(GameTestHelper helper) {
+        ConstructEntity golem = GolemTestUtil.deploy(helper, GolemTestUtil.spec("brute", "clay", "arcane"), 9, 9);
+        net.minecraft.world.entity.animal.Pig pig = helper.spawn(EntityType.PIG, 9, 2, 6);
+        pig.setNoAi(true);
+        net.minecraft.world.phys.Vec3 stall = helper.absoluteVec(new net.minecraft.world.phys.Vec3(9.89, 2, 8.77));
+        golem.setPos(stall.x, stall.y, stall.z);
+        golem.setTarget(pig);
+        helper.succeedWhen(() -> helper.assertTrue(pig.getLastHurtByMob() == golem || !pig.isAlive(),
+                "the brute stalled short of the pig (distance " + String.format("%.2f", golem.distanceTo(pig)) + ")"));
+    }
+
     /** A golem with combat switched off ignores hostiles. */
     @GameTest(template = ARENA, timeoutTicks = 200)
     public static void combatToggleIsRespected(GameTestHelper helper) {

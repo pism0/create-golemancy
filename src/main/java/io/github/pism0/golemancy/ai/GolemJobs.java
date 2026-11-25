@@ -98,10 +98,19 @@ public final class GolemJobs {
                     golem.playAttackAnimation();
                     golem.doHurtTarget(target);
                 }
-            } else if (--repath <= 0) {
-                // Path recomputation is throttled, with a longer back-off when no path is found (SDD 16.1).
-                boolean found = golem.getNavigation().moveTo(target, 1.0);
-                repath = found ? 10 : 40;
+            } else {
+                double close = golem.getBbWidth() + target.getBbWidth() + 1.5;
+                boolean near = golem.distanceToSqr(target) < close * close;
+                if (--repath <= 0) {
+                    // Path recomputation is throttled, with a longer back-off when no path is found (SDD 16.1).
+                    boolean found = golem.getNavigation().moveTo(target, 1.0);
+                    repath = found || near ? 10 : 40;
+                }
+                // Navigation counts the node next to the target as reached, which leaves wide frames
+                // (a Brute is 1.9 blocks across) just outside melee reach. Close that gap directly.
+                if (near && golem.getNavigation().isDone()) {
+                    golem.getMoveControl().setWantedPosition(target.getX(), target.getY(), target.getZ(), 1.0);
+                }
             }
         }
 

@@ -1,0 +1,23 @@
+# Diagnostic for PLAYTEST D2: a Soldier and a pig its owner punches.
+#   Extra JVM flags (e.g. for temporary debug logging) go in SMOKE_JVM_OPTS.
+#   tools/run_client_direct.sh <java> d_soldier_probe 600
+20 cmd time set noon
+21 cmd gamerule doMobSpawning false
+24 cmd gamemode survival
+25 cmd effect give @s minecraft:resistance infinite 4 true
+30 cmd tp @s 20.5 -60 -4.5 0 30
+32 cmd item replace entity @s weapon.mainhand with golemancy:dormant_golem[golemancy:golem_spec={schema:1,frame:"golemancy:brute",material:"golemancy:clay",core:"golemancy:frost",behavior:{profile:"soldier",move_mode:"follow"}}]
+34 use 20 -61 0 up
+40 cmd tp @s 20.5 -60 -14.5 0 0
+140 cmd summon minecraft:pig 21.5 -60 -16.5 {NoAI:1b}
+150 cmd item replace entity @s weapon.mainhand with minecraft:air
+170 attackentity minecraft:pig
+175 cmd data get entity @e[type=pig,limit=1] Health
+260 cmd data get entity @e[type=pig,limit=1] Health
+261 cmd data get entity @e[type=golemancy:brute,limit=1] Pos
+262 cmd data get entity @s Pos
+400 cmd data get entity @e[type=pig,limit=1] Health
+401 cmd data get entity @e[type=golemancy:brute,limit=1] Pos
+402 cmd data get entity @s Pos
+403 cmd execute unless entity @e[type=pig] run say pig is dead
+410 quit
